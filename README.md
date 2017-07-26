@@ -2,7 +2,7 @@
 
 This is my personal layout for the [ErgoDox EZ](https://ergodox-ez.com/).
 
-*Please note:* This layout uses [Papageno](https://github.com/noseglasses/papageno) to process special key combinations. Papageno is currently not officially integrated with the [QMK firmware](https://github.com/qmk/qmk_firmware/) therefore to build it, you need a patched version of QMK you can find [here](https://github.com/noseglasses/qmk_firmware).
+*Please note:* This layout uses [Papageno](https://github.com/noseglasses/papageno) to process special key combinations. Papageno is currently not officially integrated with the [QMK firmware](https://github.com/qmk/qmk_firmware/) therefore to build it, you need a patched version of QMK you can find [here](https://github.com/noseglasses/qmk_firmware). The most simple way to try and test the layout is to follow the [build instructions](#how-to-build) below.
 
 ## Special Features   
 
