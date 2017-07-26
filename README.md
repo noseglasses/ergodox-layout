@@ -77,7 +77,7 @@ And all this without any keys permanently held. Neat?
 The following provides a description of the exact assignments between keys pressed and keys send.
 Here left/right, inner/outer refers to ErgoDox's four large thumb keys.
 
-| Key Send    | Keys Pressed                                                |
+| Key Send    | ErgoDox Thumb Keys Involved                                 |
 |-------------|-------------------------------------------------------------|
 | space       | right outer                                                 |
 | backspace   | left outer                                                  |
