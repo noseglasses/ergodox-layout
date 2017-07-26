@@ -42,3 +42,48 @@ git clone https://github.com/noseglasses/ergodox-layout.git keyboards/ergodox/ke
 #
 make keyboard=ergodox keymap=noseglasses
 ```
+
+# Special Features   
+
+At first glance, my layout is quite ordinary. It uses two layers for normal
+characters and special characters and some more layers for other stuff. However,
+some of the other layers (2 - ..) are currently inactive.
+
+What's special about this keymap is the use of the thumb keys. I want to do as much
+work as possible with the four large ErgoDox thumb keys. Therefore,
+I assign key combinations to them that
+trigger 
+
+*space,
+*backspace,
+*tab,
+*shift-tab (untab),
+*double tab (e.g. for auto completion),
+*enter,
+*shift (one-shot) and
+*layer toggle to symbol layer (one-shot).
+
+A similar assignment could also be achieved by using tap dances. 
+But to me it seems more healthy to tap two keys with two 
+different thumbs in a row. This is where [Papageno](https://github.com/noseglasses/papageno) comes in.
+It enables the definition of key sequences, chords and clusters. Even combinations
+of all of those are possible.
+It is possible to use matrix key-positions but also keycodes to define
+sequences, chords and clusters.
+
+By these means we can easily handle eight actions with just four keys.
+And all this without any keys permanently held. Neat?
+
+The following provides a description of the exact assignments between keys pressed and keys send.
+Here left/right, inner/outer refers to ErgoDox's four large thumb keys.
+
+| Key Send    | Keys Pressed                                                |
+|-------------|-------------------------------------------------------------|
+| space       | right outer                                                 |
+| backspace   | left outer                                                  |
+| tab         | sequence of left inner and right outer                      |
+| shift-tab   | sequence of right outre and left inner                      |
+| double tab  | tripple tap on left inner                                   |
+| enter       | sequence of left inner and right inner                      |
+| shift       | left inner (tab for one shot, hold for permanent)           |
+| layer toggle| right inner (tab for one shot, hold for permanent)          |
