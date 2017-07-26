@@ -21,11 +21,12 @@ The build process works as follows
 #
 git clone https://github.com/noseglasses/qmk_firmware.git
 cd qmk_firmware
-git submodule update --init --recursive
+git submodule update --init lib/papageno
 
 # Build Papageno for avr-gcc
 #
 cd lib/papageno
+git pull origin master
 mkdir -p build/avr-gcc
 cd build/avr-gcc
 cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../cmake/toolchains/Toolchain-avr-gcc.cmake -DPAPAGENO_PLATFORM=avr-gcc ../..
