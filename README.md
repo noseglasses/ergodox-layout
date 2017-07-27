@@ -37,7 +37,7 @@ In this way we can easily handle eight different actions, i.d. keys being send, 
 And all this without any keys permanently held. Neat?
 
 The following provides a description of the exact assignments between keys pressed and keys send.
-Here left/right, inner/outer refers to ErgoDox's four large thumb keys.
+Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the four center keys in the plancks bottom row.
 
 | Key Send    | ErgoDox Thumb Keys Involved                                 |
 |-------------|-------------------------------------------------------------|
