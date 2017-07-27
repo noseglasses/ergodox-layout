@@ -1,6 +1,7 @@
 # noseglasses' layout
 
-This is my personal layout for the [ErgoDox EZ](https://ergodox-ez.com/).
+This is my personal layout for the [ErgoDox EZ](https://ergodox-ez.com/) 
+and the [Planck](https://olkb.com/planck) keyboard.
 
 *Please note:* This layout uses [Papageno](https://github.com/noseglasses/papageno) to process special key combinations. Papageno is currently not officially integrated with the [QMK firmware](https://github.com/qmk/qmk_firmware/) therefore to build it, you need a patched version of QMK you can find [here](https://github.com/noseglasses/qmk_firmware). The most simple way to try and test the layout is to follow the [build instructions](#how-to-build) below.
 
@@ -58,9 +59,13 @@ To build it, you need
 2) A current version of Papageno (already integrated as a submodule in the patched version of QMK)
 3) The noseglasses' layout keymap files
 
-The build process works as follows
+The build process works as follows for a bash shell on GNU/Linux.
 
 ```sh
+# Define for which keyboard to build (currently supported are ergodox and planck)
+#
+KEYBOARD=ergodox
+
 # Change to your favorite build directory
 # ...
 
@@ -76,16 +81,19 @@ cd lib/papageno
 git pull origin master
 mkdir -p build/avr-gcc
 cd build/avr-gcc
-cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../cmake/toolchains/Toolchain-avr-gcc.cmake -DPAPAGENO_PLATFORM=avr-gcc ../..
+cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../cmake/toolchains/Toolchain-avr-gcc.cmake \
+      -DPAPAGENO_PLATFORM=avr-gcc \
+      -DPAPAGENO_ADDITIONAL_INCLUDE_PATHS=$PWD/../../../../tmk_core/common \
+      ../..
 make
 
 cd ../../../..
 
 # Clone noseglasses' layout
 #
-git clone https://github.com/noseglasses/ergodox-layout.git keyboards/ergodox/keymaps/noseglasses
+git clone https://github.com/noseglasses/noseglasses_qmk_layout.git keyboards/${KEYBOARD}/keymaps/noseglasses
 
 # Build the layout
 #
-make keyboard=ergodox keymap=noseglasses
+make keyboard=${KEYBOARD} keymap=noseglasses
 ```

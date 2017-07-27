@@ -1,13 +1,21 @@
 #define PERMISSIVE_HOLD
 
+#include "config.h"
+
+// Note that we try to determine the type of keyboard based on
+// what is defined through the config.h header
+
+#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
 #include "ergodox.h"
+#else
+#include "planck.h"
+#endif
+
 #include "debug.h"
 #include "action_layer.h"
 #include "version.h"
 
 #include "keymap_german.h"
-
-#include "keymap_nordic.h"
 
 #include "process_papageno.h"
 
@@ -20,12 +28,49 @@ enum ff_layers {
    M0 = 0,
    M1,
    M2,
-   M3,
-   M4
+   M3
 };
 
 #define ___________ KC_TRANSPARENT
 #define XXXXXXXXXXX KC_NO
+
+#define fXX KC_NO
+
+#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
+
+// Keymap for ErgoDox EZ
+//
+#define FF_KEYMAP( \
+    k10,k11,k12,k13,k14,k15,k18,k19,k1A,k1B,k1C,k1D, \
+    k20,k21,k22,k23,k24,k25,k28,k29,k2A,k2B,k2C,k2D, \
+    k30,k31,k32,k33,k34,k35,k38,k39,k3A,k3B,k3C,k3D, \
+    k41,k42,k43,k44,k53,k52,k5B,k5A,k49,k4A,k4B,k4C \
+) \
+   /* matrix positions */               \
+   {                                    \
+    { fXX, k10, k20, k30, fXX, fXX },   \
+    { fXX, k11, k21, k31, k41, fXX },   \
+    { fXX, k12, k22, k32, k42, k52 },   \
+    { fXX, k13, k23, k33, k43, k53 },   \
+    { fXX, k14, k24, k34, k44, fXX },   \
+    { fXX, k15, k25, k35, KC_NO, fXX },   \
+    { LCTL(KC_X), LCTL(KC_C), KC_NO, LCTL(KC_V), KC_NO, fXX },   \
+                                                                 \
+    { fXX, KC_F8, KC_NO, KC_F7,KC_NO, fXX },   \
+    { fXX, k18, k28, k38,KC_NO, fXX },   \
+    { fXX, k19, k29, k39, k49, fXX },   \
+    { fXX, k1A, k2A, k3A, k4A, k5A },   \
+    { fXX, k1B, k2B, k3B, k4B, k5B },   \
+    { fXX, k1C, k2C, k3C, k4C, fXX },   \
+    { fXX, k1D, k2D, k3D, fXX, KC_NO }    \
+   }
+#else
+   
+// Keymap for Planck
+//
+#define FF_KEYMAP PLANCK_GRID
+
+#endif
 
 // Hint: Print layouts with Libre Office Courier 9, A4, Landscape
 
@@ -33,6 +78,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* M0: Norman Layer
  *
+ * ErgoDox EZ
+ * 
  * ,--------------------------------------------------------.           ,--------------------------------------------------------.
  * |        |      |      |      |      |      |  Ctrl+x    |           |            |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+------------|           |------------+------+------+------+------+------+--------|
@@ -51,35 +98,37 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                       |Backsp|Shift |------|       |------|  M1  |Space |
  *                                       |      |      |      |       |      |      |      |
  *                                       `--------------------'       `--------------------'
+ * 
+ * Planck
+ * 
+ * ,---------------------------------------------------------------------------------------.
+ * |   =/+  |   q  |   w  |   d  |   f  |   k  |   j  |   u  |   r  |   l  |   ;  |   \|   |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |   Del  |   a  |s/Alt |e/Ctrl|   t  |   g  |   y  |   n  |i/Ctrl|o/Alt |   h  |   '"   |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |   z  |x/AltG|   c  |   v  |   b  |   p  |   m  |   ,  |./AltG|  /?  |        |
+ * |--------+------+------+------+------+-------------+------+------+------+------+--------|
+ * |   M3   |  M2  | Left | Right|Backsp|Shift |  M1  |Space |  Up  | Down |  M2  |  M3    |
+ * `---------------------------------------------------------------------------------------'
  */
-  [M0] = KEYMAP(
-      XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,LCTL(KC_X) ,
-      KC_EQUAL   ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,LCTL(KC_C) ,
-      KC_DELETE  ,KC_A       ,ALT_T(KC_S),CTL_T(KC_E),KC_T       ,LT(M1,KC_G),
-      XXXXXXXXXXX,KC_Z       ,ALGR_T(KC_X),KC_C      ,KC_V       ,KC_B       ,LCTL(KC_V) ,
-      RESET      ,OSL(M3)    ,OSL(M2)    ,KC_LEFT    ,KC_RIGHT   ,
-                                                                              XXXXXXXXXXX,XXXXXXXXXXX,
-                                                                                          XXXXXXXXXXX,
-                                                                  KC_BSPACE  ,OSM(MOD_LSFT),XXXXXXXXXXX,
-
-                  XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,
-                  KC_F8      ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,KC_BSLASH  ,
-                              KC_Y       ,KC_N       ,CTL_T(KC_I),ALT_T(KC_O),LT(2,KC_H) ,KC_QUOTE   ,
-                  KC_F7      ,KC_P       ,KC_M       ,KC_COMMA   ,ALGR_T(KC_DOT),KC_SLASH,XXXXXXXXXXX,
-                                          KC_UP      ,KC_DOWN    ,OSL(M2)    ,OSL(M3)    ,XXXXXXXXXXX,
-      XXXXXXXXXXX,XXXXXXXXXXX,
-      XXXXXXXXXXX,
-      XXXXXXXXXXX,OSL(1)     ,KC_SPACE
-   ),
+   
+  [M0] = FF_KEYMAP(
+     KC_EQUAL   ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,KC_BSLASH,
+     KC_DELETE  ,KC_A       ,ALT_T(KC_S),CTL_T(KC_E),KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,CTL_T(KC_I),ALT_T(KC_O),LT(2,KC_H) ,KC_QUOTE,
+     XXXXXXXXXXX,KC_Z       ,ALGR_T(KC_X),KC_C      ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,ALGR_T(KC_DOT),KC_SLASH,XXXXXXXXXXX,
+     OSL(M3)    ,OSL(M2)    ,KC_LEFT    ,KC_RIGHT   ,KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,KC_UP      ,KC_DOWN    ,OSL(M2)    ,OSL(M3)
+  ),
 
 /* M1: Symbol
  *
+ * ErgoDox EZ
+ * 
  * ,--------------------------------------------------------.           ,--------------------------------------------------------.
  * |        |      |      |      |      |      |  Ctrl+x    |           |            |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+------------|           |------------+------+------+------+------+------+--------|
  * |   °    |   @  |   _  |   [  |   ]  |   ^  |  Ctrl+c    |           |    F8      |   !  |   <  |   >  |   =  |   &  |  ´     |
  * |--------+------+------+------+------+------|            |           |            |------+------+------+------+------+--------|
- * |        |   \  |   /  |   {  |   }  |   *  |------------|           |------------|   ?  |   (  |   )  |   -  |   :  |        |
+ * |        |   \  |   /  |   {  |   }  |   *  |------------|           |------------|   ?  |   (  |   )  |   -  |   :  |  `     |
  * |--------+------+------+------+------+------|  Ctrl+v    |           |    F7      |------+------+------+------+------+--------|
  * |        |   #  |   ~  |   |  |   $  |   €  |            |           |            |   +  |   %  |   "  |   '  |   ;  |        |
  * `--------+------+------+------+------+-------------------'           `------------+------+------+------+------+------+--------'
@@ -92,29 +141,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                       |Backsp|Shift |------|       |------|      |Space |
  *                                       |      |      |      |       |      |      |      |
  *                                       `--------------------'       `--------------------'
+ * 
+ * Planck
+ * 
+ * ,---------------------------------------------------------------------------------------.
+ * |   °    |   @  |   _  |   [  |   ]  |   ^  |   !  |   <  |   >  |   =  |   &  |  ´     |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |   \  |   /  |   {  |   }  |   *  |   ?  |   (  |   )  |   -  |   :  |  `     |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |   #  |   ~  |   |  |   $  |   €  |   +  |   %  |   "  |   '  |   ;  |        |
+ * |--------+------+------+------+------+-------------+------+------+------+------+--------|
+ * |   M3   |  M2  | Left | Right|Backsp|Shift |  M1  |Space |  Up  | Down |  M2  |  M3    |
+ * `---------------------------------------------------------------------------------------'
  */
-  [M1] = KEYMAP(
-      XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,___________,
-      DE_RING    ,KC_AT      ,KC_UNDS    ,KC_LBRC    ,KC_RBRC    ,KC_CIRC    ,___________,
-      XXXXXXXXXXX,KC_BSLS    ,KC_SLSH    ,KC_LCBR    ,KC_RCBR    ,KC_ASTR    ,
-      XXXXXXXXXXX,KC_HASH    ,KC_TILD    ,KC_PIPE    ,KC_DLR     ,DE_EURO    ,___________,
-      ___________,___________,___________,___________,___________,
-                                                                              XXXXXXXXXXX,XXXXXXXXXXX,
-                                                                                          XXXXXXXXXXX,
-                                                                  ___________,___________,XXXXXXXXXXX,
-
-                  ___________,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,
-                  ___________,KC_EXLM    ,DE_LESS    ,DE_MORE    ,KC_EQL     ,KC_AMPR    ,DE_ACUT    ,
-                              DE_QST     ,KC_LPRN    ,KC_RPRN    ,KC_MINS    ,KC_COLN    ,XXXXXXXXXXX,
-                  ___________,KC_PLUS    ,KC_PERC    ,DE_DQOT    ,KC_QUOT    ,KC_SCLN    ,XXXXXXXXXXX,
-                                          ___________,___________,___________,___________,___________,
-
-      XXXXXXXXXXX,XXXXXXXXXXX,
-      XXXXXXXXXXX,
-      XXXXXXXXXXX,___________,___________
+   
+  [M1] = FF_KEYMAP(
+     DE_RING    ,KC_AT      ,KC_UNDS    ,KC_LBRC    ,KC_RBRC    ,KC_CIRC    ,KC_EXLM    ,DE_LESS    ,DE_MORE    ,KC_EQL     ,KC_AMPR    ,ALTG(KC_QUOT),
+     XXXXXXXXXXX,KC_BSLS    ,KC_SLSH    ,KC_LCBR    ,KC_RCBR    ,KC_ASTR    ,S(KC_SLASH),KC_LPRN    ,KC_RPRN    ,KC_MINS    ,KC_COLN    ,KC_GRAVE,
+     XXXXXXXXXXX,KC_HASH    ,KC_TILD    ,KC_PIPE    ,KC_DLR     ,ALTG(KC_5) ,KC_PLUS    ,KC_PERC    ,S(KC_QUOT) ,KC_QUOT    ,KC_SCLN    ,XXXXXXXXXXX,
+     ___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________
    ),
    
 /* M2: Navigation & Number Blocks
+ * 
+ * ErgoDox EZ
  * 
  * ,--------------------------------------------------------.           ,--------------------------------------------------------.
  * |        |      |      |      |      |      |  Ctrl+x    |           |            |      |      |      |      |      |        |
@@ -134,37 +184,39 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                       |Backsp|Shift |------|       |------|      |Space |
  *                                       |      |      |      |       |      |      |      |
  *                                       `--------------------'       `--------------------'
+ * 
+ * Planck
+ * 
+ * ,---------------------------------------------------------------------------------------.
+ * |        | PgUp | Bksp |  Up  |  DEL | PgDn |      |   7  |   8  |   9  |      | Ins    |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        | Home |  Lft | Down | Right| End  |      |   4  |   5  |   6  |   .  |        |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |      |  Tab |      | Enter|      |   0  |   1  |   2  |   3  |   ,  |        |
+ * |--------+------+------+------+------+-------------+------+------+------+------+--------|
+ * |   M3   |  M2  | Left | Right|Backsp|Shift |  M1  |Space |  Up  | Down |  M2  |  M3    |
+ * `---------------------------------------------------------------------------------------'
  */
-  [M2] = KEYMAP(
-      XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,___________,
-      XXXXXXXXXXX,KC_PGUP    ,KC_BSPC    ,KC_UP      ,KC_DEL     ,KC_PGDN    ,___________,
-      XXXXXXXXXXX,KC_HOME    ,KC_LEFT    ,KC_DOWN    ,KC_RGHT    ,KC_END     ,
-      XXXXXXXXXXX,XXXXXXXXXXX,KC_TAB     ,XXXXXXXXXXX,KC_ENT     ,XXXXXXXXXXX,___________,
-      ___________,___________,___________,___________,___________,
-                                                                              XXXXXXXXXXX,XXXXXXXXXXX,
-                                                                                          XXXXXXXXXXX,
-                                                                  ___________,___________,XXXXXXXXXXX,
-
-                  ___________,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,
-                  ___________,XXXXXXXXXXX,KC_7       ,KC_8       ,KC_9       ,XXXXXXXXXXX,KC_INS     ,  
-                              XXXXXXXXXXX,KC_4       ,KC_5       ,KC_6       ,KC_DOT     ,XXXXXXXXXXX,
-                  ___________,KC_0       ,KC_1       ,KC_2       ,KC_3       ,KC_COMM    ,XXXXXXXXXXX,
-                                          ___________,___________,___________,___________,___________,
-      XXXXXXXXXXX,XXXXXXXXXXX,
-      XXXXXXXXXXX,
-      XXXXXXXXXXX,___________,___________
+   
+  [M2] = FF_KEYMAP(
+     XXXXXXXXXXX,KC_PGUP    ,KC_BSPC    ,KC_UP      ,KC_DEL     ,KC_PGDN    ,XXXXXXXXXXX,KC_7       ,KC_8       ,KC_9       ,XXXXXXXXXXX,KC_INS     ,
+     XXXXXXXXXXX,KC_HOME    ,KC_LEFT    ,KC_DOWN    ,KC_RGHT    ,KC_END     ,XXXXXXXXXXX,KC_4       ,KC_5       ,KC_6       ,KC_DOT     ,XXXXXXXXXXX,
+     XXXXXXXXXXX,XXXXXXXXXXX,KC_TAB     ,XXXXXXXXXXX,KC_ENT     ,XXXXXXXXXXX,KC_0       ,KC_1       ,KC_2       ,KC_3       ,KC_COMM    ,XXXXXXXXXXX,
+     ___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________
    ),
 
 /* M3: Function & Media Keys
+ * 
+ * ErgoDox EZ
  * 
  * ,--------------------------------------------------------.           ,--------------------------------------------------------.
  * |        |      |      |      |      |      |  Ctrl+x    |           |            |      |      |      |      |      |        |
  * |--------+------+------+------+------+------+------------|           |------------+------+------+------+------+------+--------|
  * |        |      | Print|Scroll|Pause |      |  Ctrl+c    |           |    F8      |      |  F7  |  F8  |  F9  |  F12 |        |
  * |--------+------+------+------+------+------|            |           |            |------+------+------+------+------+--------|
- * |        |      | Mute | Vol- | Vol+ |      |------------|           |------------|   ³  |  F4  |  F5  |  F6  |  F11 |        |
+ * |        |      | Mute | Vol- | Vol+ |      |------------|           |------------|   Â³  |  F4  |  F5  |  F6  |  F11 |        |
  * |--------+------+------+------+------+------|  Ctrl+v    |           |    F7      |------+------+------+------+------+--------|
- * |        |      | Prev | Play | Next |      |            |           |            |   ²  |  F1  |  F2  |  F3  |  F10 |        |
+ * |        |      | Prev | Play | Next |      |            |           |            |   Â²  |  F1  |  F2  |  F3  |  F10 |        |
  * `--------+------+------+------+------+-------------------'           `------------+------+------+------+------+------+--------'
  *   |      |      |      |      |      |                                                   |      |      |      |      |      |
  *   `----------------------------------'                                                   `----------------------------------'
@@ -175,51 +227,30 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                                       |Backsp|Shift |------|       |------|      |Space |
  *                                       |      |      |      |       |      |      |      |
  *                                       `--------------------'       `--------------------'
+ * 
+ * Planck
+ * 
+ * ,---------------------------------------------------------------------------------------.
+ * |        |      | Print|Scroll|Pause |      |      |  F7  |  F8  |  F9  |  F12 |        |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |      | Mute | Vol- | Vol+ |      |   Â³ |  F4  |  F5  |  F6  |  F11 |        |
+ * |--------+------+------+------+------+------|------+------+------+------+------+--------|
+ * |        |      | Prev | Play | Next |      |   Â² |  F1  |  F2  |  F3  |  F10 |        |
+ * |--------+------+------+------+------+-------------+------+------+------+------+--------|
+ * |   M3   |  M2  | Left | Right|Backsp|Shift |  M1  |Space |  Up  | Down |  M2  |  M3    |
+ * `---------------------------------------------------------------------------------------'
  */
-  [M3] = KEYMAP(
-      XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,___________,
-      XXXXXXXXXXX,XXXXXXXXXXX,KC_PSCR    ,KC_SLCK    ,KC_PAUS    ,XXXXXXXXXXX,___________,   
-      XXXXXXXXXXX,XXXXXXXXXXX,KC_MUTE    ,KC_VOLD    ,KC_VOLU    ,XXXXXXXXXXX,
-      XXXXXXXXXXX,XXXXXXXXXXX,KC_MPRV    ,KC_MPLY    ,KC_MNXT    ,XXXXXXXXXXX,___________,
-      ___________,___________,___________,___________,___________,
-                                                                              XXXXXXXXXXX,XXXXXXXXXXX,
-                                                                                          XXXXXXXXXXX,
-                                                                  ___________,___________,XXXXXXXXXXX,
-
-                  ___________,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,XXXXXXXXXXX,
-                  ___________,XXXXXXXXXXX,KC_F7      ,KC_F8      ,KC_F9      ,KC_F12     ,XXXXXXXXXXX,
-                              DE_SQ3     ,KC_F4      ,KC_F5      ,KC_F6      ,KC_F11     ,KC_ENT     ,
-                  ___________,DE_SQ2     ,KC_F1      ,KC_F2      ,KC_F3      ,KC_F10     ,XXXXXXXXXXX,
-                                          ___________,___________,___________,___________,___________,
-      XXXXXXXXXXX,XXXXXXXXXXX,
-      XXXXXXXXXXX,
-      XXXXXXXXXXX,___________,___________
-   ),
-      
-   /* M4: QWERTY
-    */
-  [M4] = KEYMAP(
-      KC_GRAVE   ,KC_1       ,KC_2        ,KC_3      ,KC_4       ,KC_5       ,___________,   
-      KC_EQUAL   ,KC_Q       ,KC_W        ,KC_E      ,KC_R       ,KC_T       ,___________,
-      KC_DELETE  ,KC_A       ,KC_S        ,KC_D      ,KC_F       ,KC_G       ,
-      KC_LSHIFT  ,KC_Z       ,KC_X        ,KC_C      ,KC_V       ,KC_B       ,___________,
-      ___________,___________,___________,___________,___________,
-                                                                              ___________,___________,
-                                                                                          KC_HOME    ,
-                                                                  KC_BSPACE  ,KC_TAB     ,KC_END     ,
-
-                  ___________,KC_6       ,KC_7       ,KC_8       ,KC_9       ,KC_0       ,KC_MINUS   ,
-                  ___________,KC_Y       ,KC_U       ,KC_I       ,KC_O       ,KC_P       ,KC_BSLASH  ,
-                              KC_H       ,KC_J       ,KC_K       ,KC_L       ,KC_SCOLON  ,___________,
-                  ___________,KC_N       ,KC_M       ,KC_COMMA   ,KC_DOT     ,KC_SLASH   ,KC_RSHIFT  ,
-                                          ___________,___________,___________,___________,___________,
-      ___________,KC_ESCAPE,
-      KC_PGUP    ,
-      KC_PGDOWN  ,KC_ENTER ,KC_SPACE
-   )
+   
+  [M3] = FF_KEYMAP(
+     XXXXXXXXXXX,XXXXXXXXXXX,KC_PSCR    ,KC_SLCK    ,KC_PAUS    ,XXXXXXXXXXX,XXXXXXXXXXX,KC_F7      ,KC_F8      ,KC_F9      ,KC_F12     ,XXXXXXXXXXX,  
+     XXXXXXXXXXX,XXXXXXXXXXX,KC_MUTE    ,KC_VOLD    ,KC_VOLU    ,XXXXXXXXXXX,DE_SQ3     ,KC_F4      ,KC_F5      ,KC_F6      ,KC_F11     ,XXXXXXXXXXX,
+     XXXXXXXXXXX,XXXXXXXXXXX,KC_MPRV    ,KC_MPLY    ,KC_MNXT    ,XXXXXXXXXXX,DE_SQ2     ,KC_F1      ,KC_F2      ,KC_F3      ,KC_F10     ,XXXXXXXXXXX,
+     ___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________,___________
+  )
+  
 //,
    
-//    [ff_layer_aux] = KEYMAP(
+//    [ff_layer_aux] = FF_KEYMAP(
 //       ___________,___________,___________,___________,___________,___________,___________,   
 //       ___________,___________,___________,___________,___________,___________,___________,   
 //       ___________,___________,___________,___________,___________,___________,
@@ -261,6 +292,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     k57,k58,                                                    
     k59,                                                        
     k5C,k5B,k5A
+    
+#define PLANCK_GRID( \
+   k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b, \
+   k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b, \
+   k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b, \
+   k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b \
+) \
+{ \
+   { k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b }, \
+   { k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b }, \
+   { k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b }, \
+   { k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b } \
+}
 #endif
 
 // Define a bunch of key positions that are going to be used as 
@@ -269,20 +313,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // Important: Every key macro must feature 
 //            the auxiliary macro parameter S
 //
+#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
+
 #define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 2, S)
 #define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 3, S)
 
 #define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, B, S)
 #define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, A, S)
 
-#define ESC_KEY(S) PPG_QMK_KEYPOS_HEX(5, 8, S)
+#else
 
-#define LEFT_MIDDLE_FINGER_BASE_ROW(S) PPG_QMK_KEYPOS_HEX(4, 3, S)
-#define LEFT_INDEX_FINGER_BASE_ROW(S) PPG_QMK_KEYPOS_HEX(4, 4, S)
-#define RIGHT_MIDDLE_FINGER_BASE_ROW(S) PPG_QMK_KEYPOS_HEX(4, 9, S)
-#define RIGHT_INDEX_FINGER_BASE_ROW(S) PPG_QMK_KEYPOS_HEX(4, A, S)
+#define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 5, S)
+#define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 4, S)
 
-#define LEFT_UPPER_CORNER_KEY(S) PPG_QMK_KEYPOS_HEX(0, 0, S)
+#define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 6, S)
+#define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 7, S)
+
+#endif
 
 // Define a set of Papageno inputs that are associated with
 // keyboard matrix positions.
@@ -295,13 +342,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 __NL__      OP(LEFT_INNER_THUMB_KEY) \
 __NL__      OP(LEFT_OUTER_THUMB_KEY) \
 __NL__      OP(RIGHT_INNER_THUMB_KEY) \
-__NL__      OP(RIGHT_OUTER_THUMB_KEY) \
-__NL__      OP(ESC_KEY) \
-__NL__      OP(LEFT_MIDDLE_FINGER_BASE_ROW) \
-__NL__      OP(LEFT_INDEX_FINGER_BASE_ROW) \
-__NL__      OP(RIGHT_MIDDLE_FINGER_BASE_ROW) \
-__NL__      OP(RIGHT_INDEX_FINGER_BASE_ROW) \
-__NL__      OP(LEFT_UPPER_CORNER_KEY)
+__NL__      OP(RIGHT_OUTER_THUMB_KEY)
 
 // Define a set of Papageno inputs that are associated with
 // qmk keycodes.
@@ -315,19 +356,6 @@ __NL__      OP(LEFT_UPPER_CORNER_KEY)
 // Initialize Papageno data structures for qmk
 //
 PPG_QMK_INIT_DATA_STRUCTURES
-
-// leaving this in place for compatibilty with old keymaps cloned and re-compiled.
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-      switch(id) {
-        case 0:
-        if (record->event.pressed) {
-          SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-        }
-        break;
-      }
-    return MACRO_NONE;
-};
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
@@ -435,26 +463,10 @@ void init_papageno(void)
       M0, // Layer
       RESET, // Keycode action
       // Matrix keypos...
-      LEFT_MIDDLE_FINGER_BASE_ROW,
-      LEFT_INDEX_FINGER_BASE_ROW,
-      RIGHT_MIDDLE_FINGER_BASE_ROW,
-      RIGHT_INDEX_FINGER_BASE_ROW
-   );
-   
-   /* Allow double tap of the key at the upper left to toggle to qwerty layer
-    */
-   ppg_tap_dance(
-      M0,
-      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(LEFT_UPPER_CORNER_KEY), /* The tap key
-         could also be a keycode using PPG_QMK_INPUT_FROM_KEYCOKC_ALIAS */
-      PPG_TAP_DEFINITIONS(
-         PPG_TAP(
-            2, 
-            PPG_QMK_ACTION_KEYCODE(
-               TG(M4)
-            )
-         )
-      )
+      LEFT_INNER_THUMB_KEY,
+      LEFT_OUTER_THUMB_KEY,
+      RIGHT_INNER_THUMB_KEY,
+      RIGHT_OUTER_THUMB_KEY
    );
    
    ppg_global_compile();
@@ -468,6 +480,7 @@ void matrix_scan_user(void) {
     
 //    PPG_LOG("Matrix scan user\n");
    
+#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
     uint8_t layer = biton32(layer_state);
 
     ergodox_board_led_off();
@@ -504,5 +517,7 @@ void matrix_scan_user(void) {
         default:
             break;
     }
+#endif
+
     ppg_qmk_matrix_scan();
 };
