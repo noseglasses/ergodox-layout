@@ -363,7 +363,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
    
    if(key_processed) { return false; }
 
-   uprintf("p kk: %u\n", keycode);
+//   uprintf("p kk: %u\n", keycode);
 
   switch (keycode) {
     case VRSN:
@@ -459,14 +459,21 @@ void init_papageno(void)
    /* Define a secret chord that triggers flashing of 
     * the keyboard software
     */
-   PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
-      M0, // Layer
-      RESET, // Keycode action
-      // Matrix keypos...
-      LEFT_INNER_THUMB_KEY,
-      LEFT_OUTER_THUMB_KEY,
-      RIGHT_INNER_THUMB_KEY,
-      RIGHT_OUTER_THUMB_KEY
+   ppg_token_set_flags(
+      PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
+         M0, // Layer
+         RESET, // Keycode action
+         // Matrix keypos...
+         LEFT_INNER_THUMB_KEY,
+         LEFT_OUTER_THUMB_KEY,
+         RIGHT_INNER_THUMB_KEY,
+         RIGHT_OUTER_THUMB_KEY
+      ),
+      
+      // Without the following the chord would consume all consequent
+      // releases and re-pressing of keys involved
+      //
+      PPG_Chord_Flags_Disallow_Input_Deactivation
    );
    
    ppg_global_compile();
