@@ -1,4 +1,5 @@
 #define PERMISSIVE_HOLD
+#define PREVENT_STUCK_MODIFIERS
 
 #include "config.h"
 
@@ -6,9 +7,13 @@
 // what is defined through the config.h header
 
 #ifdef KEYBOARDS_ERGODOX_CONFIG_H_
-#include "ergodox.h"
+   #include "ergodox.h"
 #else
-#include "planck.h"
+   #include "planck.h"
+#endif
+
+#ifdef AUDIO_ENABLE
+   #include "audio.h"
 #endif
 
 #include "debug.h"
@@ -17,7 +22,9 @@
 
 #include "keymap_german.h"
 
+#ifdef PAPAGENO_ENABLE
 #include "process_papageno.h"
+#endif
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -272,6 +279,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 
+#ifdef AUDIO_ENABLE
+
+float tone_startup[][2]    = SONG(STARTUP_SOUND);
+//float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
+// float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
+// float tone_colemak[][2]    = SONG(COLEMAK_SOUND);
+// float tone_plover[][2]     = SONG(PLOVER_SOUND);
+// float tone_plover_gb[][2]  = SONG(PLOVER_GOODBYE_SOUND);
+float music_scale[][2]     = SONG(MUSIC_SCALE_SOUND);
+
+float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
+#endif
+
+#ifdef PAPAGENO_ENABLE
+
 #if 0
     /* left hand, spatial positions */                          
     k00,k01,k02,k03,k04,k05,k06,                                
@@ -323,11 +345,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #else
 
-#define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 5, S)
-#define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 4, S)
+// #define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 5, S)
+// #define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 4, S)
+// 
+// #define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 6, S)
+// #define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 7, S)
 
-#define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 6, S)
-#define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 7, S)
+#define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 3, S)
+#define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(4, 3, S)
+
+#define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(6, 3, S)
+#define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(7, 3, S)
 
 #endif
 
@@ -356,25 +384,6 @@ __NL__      OP(RIGHT_OUTER_THUMB_KEY)
 // Initialize Papageno data structures for qmk
 //
 PPG_QMK_INIT_DATA_STRUCTURES
-
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-   bool key_processed = ppg_qmk_process_event(keycode, record);
-   
-   if(key_processed) { return false; }
-
-//   uprintf("p kk: %u\n", keycode);
-
-  switch (keycode) {
-    case VRSN:
-      if (record->event.pressed) {
-        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
-      }
-      return false;
-      break;
-  }
-  return true;
-}
 
 void double_tab_callback(void *user_data)
 {
@@ -479,8 +488,38 @@ void init_papageno(void)
    ppg_global_compile();
 }
 
+#endif
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+   #ifdef PAPAGENO_ENABLE
+   bool key_processed = ppg_qmk_process_event(keycode, record);
+   
+   if(key_processed) { return false; }
+   #endif
+//   uprintf("p kk: %u\n", keycode);
+
+  switch (keycode) {
+    case VRSN:
+      if (record->event.pressed) {
+        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+      }
+      return false;
+      break;
+  }
+  return true;
+}
+
+
 void matrix_init_user(void) { 
+   
+   #ifdef PAPAGENO_ENABLE
    init_papageno();
+   #endif
+       
+   #ifdef AUDIO_ENABLE
+   startup_user();
+   #endif
 }
 
 void matrix_scan_user(void) {
@@ -526,5 +565,34 @@ void matrix_scan_user(void) {
     }
 #endif
 
-    ppg_qmk_matrix_scan();
+   #ifdef PAPAGENO_ENABLE
+   ppg_qmk_matrix_scan();
+   #endif
 };
+
+#ifdef AUDIO_ENABLE
+
+void startup_user(void)
+{
+    _delay_ms(20); // gets rid of tick
+    PLAY_NOTE_ARRAY(tone_startup, false, 0);
+}
+
+void shutdown_user(void)
+{
+    PLAY_NOTE_ARRAY(tone_goodbye, false, 0);
+    _delay_ms(150);
+    stop_all_notes();
+}
+
+void music_on_user(void)
+{
+    music_scale_user();
+}
+
+void music_scale_user(void)
+{
+    PLAY_NOTE_ARRAY(music_scale, false, 0);
+}
+
+#endif
