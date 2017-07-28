@@ -18,6 +18,7 @@ Therefore, I assign key combinations to them that trigger
 
 * space,
 * backspace,
+* del,
 * tab,
 * shift-tab (untab),
 * double tab (e.g. for auto completion),
@@ -43,6 +44,7 @@ Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the fo
 |-------------|-------------------------------------------------------------|
 | space       | right outer                                                 |
 | backspace   | left outer                                                  |
+| delete      | sequence of right inner and left outer                      |
 | tab         | sequence of left inner and right outer                      |
 | shift-tab   | sequence of right outre and left inner                      |
 | double tab  | tripple tap on left inner                                   |
