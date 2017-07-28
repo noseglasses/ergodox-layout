@@ -134,7 +134,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Ctrl |   z  |x/AltG|   c  |   v  |   b  |   p  |   m  |   ,  |./AltG|  /?  | Ctrl |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Cut  | Copy | Paste| Down |Backsp|Shift |  M1  |Space |  Up  |  S1  |  S2  | ESC  |
+ * |Cut/S3|Cpy/S4|Pst/S5| Down |Backsp|Shift |  M1  |Space |  Up  |  S1  |F7/S2 | ESC  |
  * `-----------------------------------------------------------------------------------'
  */
    
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      OSL(M3)    ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,OSL(M3)    ,
      OSL(M2)    ,KC_A       ,ALT_T(KC_S),KC_E       ,KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,KC_I       ,ALT_T(KC_O),LT(2,KC_H) ,OSL(M2)    ,
      OSM(MOD_LCTL),KC_Z     ,ALGR_T(KC_X),KC_C      ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,ALGR_T(KC_DOT),KC_SLASH,OSM(MOD_LCTL),
-     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,KC_DOWN    ,KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,KC_UP      ,XXXXXXXXXXX,XXXXXXXXXXX,KC_ESC
+     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,KC_DOWN    ,KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,KC_UP      ,XXXXXXXXXXX,KC_F7      ,KC_ESC
   ),
 
 /* M1: Symbol
@@ -248,19 +248,7 @@ float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
     k57,k58,                                                    
     k59,                                                        
     k5C,k5B,k5A
-    
-#define PLANCK_GRID( \
-   k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b, \
-   k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b, \
-   k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b, \
-   k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b \
-) \
-{ \
-   { k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b }, \
-   { k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b }, \
-   { k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b }, \
-   { k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b } \
-}
+
 #endif
 
 // Define a bunch of key positions that are going to be used as 
@@ -279,7 +267,25 @@ float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
 
 #define SPECIAL_KEY_1(S) PPG_QMK_KEYPOS_HEX(4, B, S)
 #define SPECIAL_KEY_2(S) PPG_QMK_KEYPOS_HEX(4, C, S)
+#define SPECIAL_KEY_3(S) PPG_QMK_KEYPOS_HEX(4, 0, S)
+#define SPECIAL_KEY_4(S) PPG_QMK_KEYPOS_HEX(4, 1, S)
+#define SPECIAL_KEY_5(S) PPG_QMK_KEYPOS_HEX(4, 2, S)
 #else
+    
+/*
+#define PLANCK_GRID( \
+   k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b, \
+   k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b, \
+   k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b, \
+   k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b \
+) \
+{ \
+   { k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b }, \
+   { k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b }, \
+   { k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b }, \
+   { k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b } \
+}
+*/
 
 // #define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 5, S)
 // #define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 4, S)
@@ -299,6 +305,9 @@ float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
 
 #define SPECIAL_KEY_1(S) PPG_QMK_KEYPOS_HEX(9, 3, S)
 #define SPECIAL_KEY_2(S) PPG_QMK_KEYPOS_HEX(A, 3, S)
+#define SPECIAL_KEY_3(S) PPG_QMK_KEYPOS_HEX(0, 3, S)
+#define SPECIAL_KEY_4(S) PPG_QMK_KEYPOS_HEX(1, 3, S)
+#define SPECIAL_KEY_5(S) PPG_QMK_KEYPOS_HEX(2, 3, S)
 #endif
 
 // Define a set of Papageno inputs that are associated with
@@ -316,7 +325,10 @@ __NL__      OP(RIGHT_INNER_THUMB_KEY) \
 __NL__      OP(RIGHT_OUTER_THUMB_KEY) \
 \
 __NL__      OP(SPECIAL_KEY_1) \
-__NL__      OP(SPECIAL_KEY_2)
+__NL__      OP(SPECIAL_KEY_2) \
+__NL__      OP(SPECIAL_KEY_3) \
+__NL__      OP(SPECIAL_KEY_4) \
+__NL__      OP(SPECIAL_KEY_5)
 
 // Define a set of Papageno inputs that are associated with
 // qmk keycodes.
@@ -451,16 +463,69 @@ void init_papageno(void)
       PPG_Chord_Flags_Disallow_Input_Deactivation
    );
    
+   // Double tap on S1 repeats last command (Up, Enter)
+   //
    ppg_tap_dance(
       M0,
-      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_1), /* The tap key
-         could also be a keycode using PPG_QMK_INPUT_FROM_KEYCOKC_ALIAS */
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_1),
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             2, 
             PPG_ACTION_USER_CALLBACK(
                repeat_last_command_callback,
                NULL
+            )
+         )
+      )
+   );
+   
+   // Double tap on S3 triggers F1 (customized search command)
+   // Triple tap on S3 triggers Shift+F1 (customized search in files)
+   //
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_3), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            2, 
+            PPG_QMK_ACTION_KEYCODE(
+               KC_F1
+            )
+         ),
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               S(KC_F1)
+            )
+         ),
+      )
+   );
+   
+   // Double tap on S4 triggers F2 (customized replace)
+   //
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_4), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            2, 
+            PPG_QMK_ACTION_KEYCODE(
+               KC_F2
+            )
+         )
+      )
+   );
+      
+   // Double tap on S5 triggers F3 (customized continue search)
+   //
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_5), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            2, 
+            PPG_QMK_ACTION_KEYCODE(
+               KC_F3
             )
          )
       )
