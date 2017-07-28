@@ -359,6 +359,15 @@ void repeat_last_command_callback(void *user_data)
    unregister_code (KC_ENTER);
 }
 
+void file_search_command_callback(void *user_data)
+{
+   register_code16 (S(KC_F1));
+   send_keyboard_report();
+   unregister_code16 (S(KC_F1));
+   send_keyboard_report();
+   register_code (KC_ENTER);
+   unregister_code (KC_ENTER);
+}
 
 void init_papageno(void)
 {
@@ -494,8 +503,9 @@ void init_papageno(void)
          ),
          PPG_TAP(
             3, 
-            PPG_QMK_ACTION_KEYCODE(
-               S(KC_F1)
+            PPG_ACTION_USER_CALLBACK(
+               file_search_command_callback,
+               NULL
             )
          ),
       )
