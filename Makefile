@@ -43,15 +43,6 @@ endif
 
 OPT_DEFS += -DUSER_PRINT
 
-# The default behavior is to first check it an 
-# input is defined through the keypos of a key.
-# If not then we check the assigned keycode.
-# 
-# By defining PPG_QMK_REVERSE_KEYPOS_TO_KEYCODE_PRECEDENCE
-# this order can be reversed.
-#
-OPT_DEFS += -DPPG_QMK_REVERSE_KEYPOS_TO_KEYCODE_PRECEDENCE
-
 KEYMAP_VERSION = $(shell \
  if [ -d "${KEYMAP_PATH}/.git" ]; then \
   cd "${KEYMAP_PATH}" && git describe --abbrev=6 --dirty --always --tags --match 'v*' 2>/dev/null; \
