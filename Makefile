@@ -41,7 +41,8 @@ OPT_DEFS += -DKEYLOGGER_ENABLE
 CONSOLE_ENABLE = yes
 endif
 
-OPT_DEFS += -DUSER_PRINT
+# OPT_DEFS += -DUSER_PRINT
+# OPT_DEFS += -DDEBUG_ACTION
 
 KEYMAP_VERSION = $(shell \
  if [ -d "${KEYMAP_PATH}/.git" ]; then \

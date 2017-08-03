@@ -1,5 +1,5 @@
 #define PERMISSIVE_HOLD
-#define PREVENT_STUCK_MODIFIERS
+// #define PREVENT_STUCK_MODIFIERS
 
 #include "config.h"
 
@@ -343,30 +343,53 @@ __NL__      OP(SPECIAL_KEY_5)
 //
 PPG_QMK_INIT_DATA_STRUCTURES
 
-void double_tab_callback(void *user_data)
+void double_tab_callback(bool activation, void *user_data)
 {
+   if(!activation) { return; }
+   
    register_code (KC_TAB);
    unregister_code (KC_TAB);
    register_code (KC_TAB);
    unregister_code (KC_TAB);
 }
 
-void repeat_last_command_callback(void *user_data)
+void repeat_last_command_callback(bool activation, void *user_data)
 {
+   if(!activation) { return; }
+   
    register_code (KC_UP);
    unregister_code (KC_UP);
    register_code (KC_ENTER);
    unregister_code (KC_ENTER);
 }
 
-void file_search_command_callback(void *user_data)
+void ordinary_search_command_callback(bool activation, void *user_data)
 {
+   if(!activation) { return; }
+   
+   register_code16 (KC_F1);
+   unregister_code16 (KC_F1);
+   register_code (KC_ENTER);
+   unregister_code (KC_ENTER);
+}
+
+void file_search_command_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
    register_code16 (S(KC_F1));
    send_keyboard_report();
    unregister_code16 (S(KC_F1));
    send_keyboard_report();
    register_code (KC_ENTER);
    unregister_code (KC_ENTER);
+}
+
+void reset_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   reset_keyboard();
 }
 
 void init_papageno(void)
@@ -497,8 +520,9 @@ void init_papageno(void)
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             2, 
-            PPG_QMK_ACTION_KEYCODE(
-               KC_F1
+            PPG_ACTION_USER_CALLBACK(
+               ordinary_search_command_callback,
+               NULL
             )
          ),
          PPG_TAP(
@@ -508,6 +532,13 @@ void init_papageno(void)
                NULL
             )
          ),
+         PPG_TAP(
+            5, 
+            PPG_ACTION_USER_CALLBACK(
+               reset_callback,
+               NULL
+            )
+         )
       )
    );
    
@@ -521,6 +552,12 @@ void init_papageno(void)
             2, 
             PPG_QMK_ACTION_KEYCODE(
                KC_F2
+            )
+         ),
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               OSM(MOD_LSFT)
             )
          )
       )
@@ -546,15 +583,23 @@ void init_papageno(void)
 
 #endif
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-
-   #ifdef PAPAGENO_ENABLE
-   bool key_processed = ppg_qmk_process_event(keycode, record);
+void action_exec_user(keyevent_t event)
+{
+   // Just for debugging with debug mode enabled (DEBUG-keycode)
+   //
+//    debug_config.matrix = true;
+//    debug_config.keyboard = true;
+//    debug_config.mouse = true;
    
-   if(key_processed) { return false; }
+   #ifdef PAPAGENO_ENABLE
+   ppg_qmk_process_event(event);
+   #else
+   action_exec(event);
    #endif
-//   uprintf("p kk: %u\n", keycode);
+}
 
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+ 
   switch (keycode) {
     case VRSN:
       if (record->event.pressed) {
@@ -565,7 +610,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
-
 
 void matrix_init_user(void) { 
    
