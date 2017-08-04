@@ -43,15 +43,24 @@ enum ff_layers {
 
 #define fXX KC_NO
 
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// ErgoDox and Planck keyboard definitions
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
+
 #ifdef KEYBOARDS_ERGODOX_CONFIG_H_
 
 // Keymap for ErgoDox EZ
 //
 #define FF_KEYMAP( \
-    X1,k11,k12,k13,k14,k15,k18,k19,k1A,k1B,k1C,X4, \
-    X2,k21,k22,k23,k24,k25,k28,k29,k2A,k2B,k2C,X5, \
-    X3,k31,k32,k33,k34,k35,k38,k39,k3A,k3B,k3C,X6, \
-    k41,k42,k43,k44,k53,k52,k5B,k5A,k49,k4A,k4B,k4C \
+    X1 ,k11,k12,k13,k14,k15,k18,k19,k1A,k1B,k1C,X4 , \
+    X2 ,k21,k22,k23,k24,k25,k28,k29,k2A,k2B,k2C,X5 , \
+    X3 ,k31,k32,k33,k34,k35,k38,k39,k3A,k3B,k3C,X6 , \
+    k40,k41,k42,k43,k53,k52,k5B,k5A,k4A,k4B,k4C,k4D \
 ) \
    KEYMAP( \
       /* left hand, spatial positions */                          \
@@ -59,7 +68,7 @@ enum ff_layers {
       X1 ,k11,k12,k13,k14,k15,LCTL(KC_C),                         \
       X2 ,k21,k22,k23,k24,k25,                                    \
       X3 ,k31,k32,k33,k34,k35,LCTL(KC_V),                         \
-      k41,k42,k43,k44,fXX,                                        \
+      k40,k41,k42,k43,fXX,                                        \
                               fXX,fXX,                            \
                                  fXX,                             \
                            k53,k52,fXX,                           \
@@ -69,17 +78,134 @@ enum ff_layers {
          KC_F8,k18,k19,k1A,k1B,k1C,X4 ,                           \
                k28,k29,k2A,k2B,k2C,X5 ,                           \
          KC_F7,k38,k39,k3A,k3B,k3C,X6 ,                           \
-                   fXX,k49,k4A,k4B,k4C,                            \
+                   fXX,k4A,k4B,k4C,k4D,                           \
       fXX,fXX,                                                    \
       fXX,                                                        \
       fXX,k5B,k5A                                                 \
    )    
 
+// Define a bunch of key aliases for transparent 
+// naming of keys
+   
+#define NG_KEY_X1  1, 0
+#define NG_KEY_01  1, 1
+#define NG_KEY_02  1, 2
+#define NG_KEY_03  1, 3
+#define NG_KEY_04  1, 4
+#define NG_KEY_05  1, 5
+#define NG_KEY_06  1, 8
+#define NG_KEY_07  1, 9
+#define NG_KEY_08  1, A
+#define NG_KEY_09  1, B
+#define NG_KEY_10  1, C
+#define NG_KEY_X4  1, D
+   
+#define NG_KEY_X2  2, 0
+#define NG_KEY_11  2, 1
+#define NG_KEY_12  2, 2
+#define NG_KEY_13  2, 3
+#define NG_KEY_14  2, 4
+#define NG_KEY_15  2, 5
+#define NG_KEY_16  2, 8
+#define NG_KEY_17  2, 9
+#define NG_KEY_18  2, A
+#define NG_KEY_19  2, B
+#define NG_KEY_20  2, C
+#define NG_KEY_X5  2, D
+   
+#define NG_KEY_X3  3, 0
+#define NG_KEY_21  3, 1
+#define NG_KEY_22  3, 2
+#define NG_KEY_23  3, 3
+#define NG_KEY_24  3, 4
+#define NG_KEY_25  3, 5
+#define NG_KEY_26  3, 8
+#define NG_KEY_27  3, 9
+#define NG_KEY_28  3, A
+#define NG_KEY_29  3, B
+#define NG_KEY_30  3, C
+#define NG_KEY_X6  3, D
+   
+#define NG_KEY_31  4, 0
+#define NG_KEY_32  4, 1
+#define NG_KEY_33  4, 2
+#define NG_KEY_34  4, 3
+#define NG_KEY_35  5, 3
+#define NG_KEY_36  5, 2
+#define NG_KEY_37  5, B
+#define NG_KEY_38  5, A
+#define NG_KEY_39  4, A
+#define NG_KEY_40  4, B
+#define NG_KEY_41  4, C
+#define NG_KEY_42  4, D
+
+#define NG_KEYPOS(KEY_ALIAS, S) PPG_QMK_KEYPOS_HEX(KEY_ALIAS, S)
 #else
    
 // Keymap for Planck
 //
 #define FF_KEYMAP PLANCK_GRID
+
+// Define a bunch of key aliases for transparent 
+// naming of keys
+   
+#define NG_KEY_X1  0, 0
+#define NG_KEY_01  0, 1
+#define NG_KEY_02  0, 2
+#define NG_KEY_03  0, 3
+#define NG_KEY_04  0, 4
+#define NG_KEY_05  0, 5
+#define NG_KEY_06  0, 6
+#define NG_KEY_07  0, 7
+#define NG_KEY_08  0, 8
+#define NG_KEY_09  0, 9
+#define NG_KEY_10  0, A
+#define NG_KEY_X4  0, B
+   
+#define NG_KEY_X2  1, 0
+#define NG_KEY_11  1, 1
+#define NG_KEY_12  1, 2
+#define NG_KEY_13  1, 3
+#define NG_KEY_14  1, 4
+#define NG_KEY_15  1, 5
+#define NG_KEY_16  1, 6
+#define NG_KEY_17  1, 7
+#define NG_KEY_18  1, 8
+#define NG_KEY_19  1, 9
+#define NG_KEY_20  1, A
+#define NG_KEY_X5  1, B
+   
+#define NG_KEY_X3  2, 0
+#define NG_KEY_21  2, 1
+#define NG_KEY_22  2, 2
+#define NG_KEY_23  2, 3
+#define NG_KEY_24  2, 4
+#define NG_KEY_25  2, 5
+#define NG_KEY_26  2, 6
+#define NG_KEY_27  2, 7
+#define NG_KEY_28  2, 8
+#define NG_KEY_29  2, 9
+#define NG_KEY_30  2, A
+#define NG_KEY_X6  2, B
+   
+#define NG_KEY_31  3, 0
+#define NG_KEY_32  3, 1
+#define NG_KEY_33  3, 2
+#define NG_KEY_34  3, 3
+#define NG_KEY_35  3, 4
+#define NG_KEY_36  3, 5
+#define NG_KEY_37  3, 6
+#define NG_KEY_38  3, 7
+#define NG_KEY_39  3, 8
+#define NG_KEY_40  3, 9
+#define NG_KEY_41  3, A
+#define NG_KEY_42  3, B
+
+#define NG_SWAP_ROW_COL(ROW, COL) COL, ROW
+
+// Planck swaps rows and cols in comparison to planck (or vice versa?)
+//
+#define NG_KEYPOS(KEY_ALIAS, S) PPG_QMK_KEYPOS_HEX(NG_SWAP_ROW_COL(KEY_ALIAS), S)
 
 #endif
 
@@ -118,6 +244,15 @@ enum ff_layers {
  * 
  * Note: Keys number 40 and 41 are special keys (S1 and S2 for extended one hand usage)
  */
+
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Keymap definitions
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
 
 // Hint: Print layouts with Libre Office Courier 9, A4, Landscape
 
@@ -251,64 +386,103 @@ float tone_goodbye[][2] = SONG(GOODBYE_SOUND);
 
 #endif
 
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Definitions for using Papageno with both ErgoDox and Planck
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
+
+/* ,-----------------------------------------------------------------------------------.
+ * |  X1  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |  10  |  X4  |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |  X2  |  11  |  12  |  13  |  14  |  15  |  16  |  17  |  18  |  19  |  20  |  X5  |
+ * |------+------+------+------+------+------|------+------+------+------+------+------|
+ * |  X3  |  21  |  22  |  23  |  24  |  25  |  26  |  27  |  28  |  29  |  30  |  X6  |
+ * |------+------+------+------+------+-------------+------+------+------+------+------|
+ * |  31  |  32  |  33  |  34  |  35  |  36  |  37  |  38  |  39  |  40  |  41  |  42  |
+ * `-----------------------------------------------------------------------------------'
+*/
 // Define a bunch of key positions that are going to be used as 
 // Papageno inputs. 
 //
 // Important: Every key macro must feature 
 //            the auxiliary macro parameter S
 //
-#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
 
-#define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 2, S)
-#define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 3, S)
+#define LEFT_INNER_THUMB_KEY(S)     NG_KEYPOS(NG_KEY_36, S)
+#define LEFT_OUTER_THUMB_KEY(S)     NG_KEYPOS(NG_KEY_35, S)
 
-#define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, B, S)
-#define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, A, S)
+#define RIGHT_INNER_THUMB_KEY(S)    NG_KEYPOS(NG_KEY_37, S)
+#define RIGHT_OUTER_THUMB_KEY(S)    NG_KEYPOS(NG_KEY_38, S)
 
-#define SPECIAL_KEY_1(S) PPG_QMK_KEYPOS_HEX(4, B, S)
-#define SPECIAL_KEY_2(S) PPG_QMK_KEYPOS_HEX(4, C, S)
-#define SPECIAL_KEY_3(S) PPG_QMK_KEYPOS_HEX(4, 0, S)
-#define SPECIAL_KEY_4(S) PPG_QMK_KEYPOS_HEX(4, 1, S)
-#define SPECIAL_KEY_5(S) PPG_QMK_KEYPOS_HEX(4, 2, S)
-#else
-    
-/*
-#define PLANCK_GRID( \
-   k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b, \
-   k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b, \
-   k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b, \
-   k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b \
-) \
-{ \
-   { k00, k01, k02, k03, k04, k05, k06, k07, k08, k09, k0a, k0b }, \
-   { k10, k11, k12, k13, k14, k15, k16, k17, k18, k19, k1a, k1b }, \
-   { k20, k21, k22, k23, k24, k25, k26, k27, k28, k29, k2a, k2b }, \
-   { k30, k31, k32, k33, k34, k35, k36, k37, k38, k39, k3a, k3b } \
-}
-*/
+#define SPECIAL_KEY_1(S)            NG_KEYPOS(NG_KEY_40, S)
+#define SPECIAL_KEY_2(S)            NG_KEYPOS(NG_KEY_41, S)
+#define SPECIAL_KEY_3(S)            NG_KEYPOS(NG_KEY_31, S)
+#define SPECIAL_KEY_4(S)            NG_KEYPOS(NG_KEY_32, S)
+#define SPECIAL_KEY_5(S)            NG_KEYPOS(NG_KEY_33, S)
 
-// #define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 5, S)
-// #define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 4, S)
-// 
-// #define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 6, S)
-// #define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(3, 7, S)
-
-// Note that the Planck uses a different row/col order than the
-// ErgoDox EZ. Therefore, row/col indices must be swapped with respect to
-// the order given in the PLANCK_GRID macro above.
+// Define alphabetic keys for norman layout. 
 //
-#define LEFT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(5, 3, S)
-#define LEFT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(4, 3, S)
+// These definition are e.g. useful to map alphabetic characters
+// to key positions.
+//
+#define ALPH_KEY_A(S)               NG_KEYPOS(NG_KEY_11, S)
+#define ALPH_KEY_B(S)               NG_KEYPOS(NG_KEY_25, S)
+#define ALPH_KEY_C(S)               NG_KEYPOS(NG_KEY_23, S)
+#define ALPH_KEY_D(S)               NG_KEYPOS(NG_KEY_03, S)
+#define ALPH_KEY_E(S)               NG_KEYPOS(NG_KEY_13, S)
+#define ALPH_KEY_F(S)               NG_KEYPOS(NG_KEY_04, S)
+#define ALPH_KEY_G(S)               NG_KEYPOS(NG_KEY_15, S)
+#define ALPH_KEY_H(S)               NG_KEYPOS(NG_KEY_20, S)
+#define ALPH_KEY_I(S)               NG_KEYPOS(NG_KEY_18, S)
+#define ALPH_KEY_J(S)               NG_KEYPOS(NG_KEY_06, S)
+#define ALPH_KEY_K(S)               NG_KEYPOS(NG_KEY_05, S)
+#define ALPH_KEY_L(S)               NG_KEYPOS(NG_KEY_09, S)
+#define ALPH_KEY_M(S)               NG_KEYPOS(NG_KEY_27, S)
+#define ALPH_KEY_N(S)               NG_KEYPOS(NG_KEY_17, S)
+#define ALPH_KEY_O(S)               NG_KEYPOS(NG_KEY_19, S)
+#define ALPH_KEY_P(S)               NG_KEYPOS(NG_KEY_26, S)
+#define ALPH_KEY_Q(S)               NG_KEYPOS(NG_KEY_01, S)
+#define ALPH_KEY_R(S)               NG_KEYPOS(NG_KEY_08, S)
+#define ALPH_KEY_S(S)               NG_KEYPOS(NG_KEY_12, S)
+#define ALPH_KEY_T(S)               NG_KEYPOS(NG_KEY_14, S)
+#define ALPH_KEY_U(S)               NG_KEYPOS(NG_KEY_07, S)
+#define ALPH_KEY_V(S)               NG_KEYPOS(NG_KEY_24, S)
+#define ALPH_KEY_W(S)               NG_KEYPOS(NG_KEY_02, S)
+#define ALPH_KEY_X(S)               NG_KEYPOS(NG_KEY_22, S)
+#define ALPH_KEY_Y(S)               NG_KEYPOS(NG_KEY_16, S)
+#define ALPH_KEY_Z(S)               NG_KEYPOS(NG_KEY_21, S)
 
-#define RIGHT_INNER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(6, 3, S)
-#define RIGHT_OUTER_THUMB_KEY(S) PPG_QMK_KEYPOS_HEX(7, 3, S)
-
-#define SPECIAL_KEY_1(S) PPG_QMK_KEYPOS_HEX(9, 3, S)
-#define SPECIAL_KEY_2(S) PPG_QMK_KEYPOS_HEX(A, 3, S)
-#define SPECIAL_KEY_3(S) PPG_QMK_KEYPOS_HEX(0, 3, S)
-#define SPECIAL_KEY_4(S) PPG_QMK_KEYPOS_HEX(1, 3, S)
-#define SPECIAL_KEY_5(S) PPG_QMK_KEYPOS_HEX(2, 3, S)
-#endif
+#define PPG_QMK_MATRIX_POSITION_INPUTS_ALPHABETIC(OP) \
+__NL__      OP(ALPH_KEY_A) \
+__NL__      OP(ALPH_KEY_B) \
+__NL__      OP(ALPH_KEY_C) \
+__NL__      OP(ALPH_KEY_D) \
+__NL__      OP(ALPH_KEY_E) \
+__NL__      OP(ALPH_KEY_F) \
+__NL__      OP(ALPH_KEY_G) \
+__NL__      OP(ALPH_KEY_H) \
+__NL__      OP(ALPH_KEY_I) \
+__NL__      OP(ALPH_KEY_J) \
+__NL__      OP(ALPH_KEY_K) \
+__NL__      OP(ALPH_KEY_L) \
+__NL__      OP(ALPH_KEY_M) \
+__NL__      OP(ALPH_KEY_N) \
+__NL__      OP(ALPH_KEY_O) \
+__NL__      OP(ALPH_KEY_P) \
+__NL__      OP(ALPH_KEY_Q) \
+__NL__      OP(ALPH_KEY_R) \
+__NL__      OP(ALPH_KEY_S) \
+__NL__      OP(ALPH_KEY_T) \
+__NL__      OP(ALPH_KEY_U) \
+__NL__      OP(ALPH_KEY_V) \
+__NL__      OP(ALPH_KEY_W) \
+__NL__      OP(ALPH_KEY_X) \
+__NL__      OP(ALPH_KEY_Y) \
+__NL__      OP(ALPH_KEY_Z)
 
 // Define a set of Papageno inputs that are associated with
 // keyboard matrix positions.
@@ -328,7 +502,9 @@ __NL__      OP(SPECIAL_KEY_1) \
 __NL__      OP(SPECIAL_KEY_2) \
 __NL__      OP(SPECIAL_KEY_3) \
 __NL__      OP(SPECIAL_KEY_4) \
-__NL__      OP(SPECIAL_KEY_5)
+__NL__      OP(SPECIAL_KEY_5) \
+\
+__NL__      PPG_QMK_MATRIX_POSITION_INPUTS_ALPHABETIC(OP)
 
 // Define a set of Papageno inputs that are associated with
 // qmk keycodes.
@@ -340,9 +516,171 @@ __NL__      OP(SPECIAL_KEY_5)
 #define PPG_QMK_KEYCODE_INPUTS(OP)
    
 // Initialize Papageno data structures for qmk
+// This is based on the definitions of 
+//
+//    PPG_QMK_MATRIX_POSITION_INPUTS
+//
+// and
+//
+//    PPG_QMK_KEYCODE_INPUTS
 //
 PPG_QMK_INIT_DATA_STRUCTURES
 
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Definitions of inventory for Papageno leader sequences
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
+
+#define NG_GLUE_AUX(S1, S2) S1##S2
+#define NG_GLUE(S1, S2) NG_GLUE_AUX(S1, S2)
+   
+#define NG_ALPH_CASE(LOWER_CASE_QUOTED, UPPER_CASE_QUOTED, ID) \
+__NL__         case LOWER_CASE_QUOTED: \
+__NL__         case UPPER_CASE_QUOTED: \
+__NL__            return PPG_QMK_KEYPOS_ENUM(NG_GLUE(ALPH_KEY_, ID));
+
+// Define an input lookup function that maps alphabetic characters
+// to inputs. This is based on the definition of the macros ALPH_KEY_*
+// above. If you use a different keylayout (i.e. not Norman) change
+// the definitions of ALPH_KEY_* accordingly.
+//
+PPG_Input_Id ng_input_from_alphabetic_character(char c) {
+   
+   switch(c) {
+      NG_ALPH_CASE('a', 'A', A)
+      NG_ALPH_CASE('b', 'B', B)
+      NG_ALPH_CASE('c', 'C', C)
+      NG_ALPH_CASE('d', 'D', D)
+      NG_ALPH_CASE('e', 'E', E)
+      NG_ALPH_CASE('f', 'F', F)
+      NG_ALPH_CASE('g', 'G', G)
+      NG_ALPH_CASE('h', 'H', H)
+      NG_ALPH_CASE('i', 'I', I)
+      NG_ALPH_CASE('j', 'J', J)
+      NG_ALPH_CASE('k', 'K', K)
+      NG_ALPH_CASE('l', 'L', L)
+      NG_ALPH_CASE('m', 'M', M)
+      NG_ALPH_CASE('n', 'N', N)
+      NG_ALPH_CASE('o', 'O', O)
+      NG_ALPH_CASE('p', 'P', P)
+      NG_ALPH_CASE('q', 'Q', Q)
+      NG_ALPH_CASE('r', 'R', R)
+      NG_ALPH_CASE('s', 'S', S)
+      NG_ALPH_CASE('t', 'T', T)
+      NG_ALPH_CASE('u', 'U', U)
+      NG_ALPH_CASE('v', 'V', V)
+      NG_ALPH_CASE('w', 'W', W)
+      NG_ALPH_CASE('x', 'X', X)
+      NG_ALPH_CASE('y', 'Y', Y)
+      NG_ALPH_CASE('z', 'Z', Z)
+   }
+   
+   return 0;
+}
+
+// This demonstrates the use of Papageno to process leader
+// keys. Currently we do nothing else than replace some keywords
+// with their upper case representations.
+
+const char string_1[] PROGMEM = "cool";
+const char string_2[] PROGMEM = "cat";
+const char string_3[] PROGMEM = "dog";
+
+PGM_P const ng_magic_word_table[] PROGMEM = 
+{
+   string_1,
+   string_2,
+   string_3
+};
+
+void ng_get_magic_word_string(uint8_t magic_word_id,
+                              char *buffer, 
+                              uint8_t max_chars)
+{
+   strncpy_P(buffer, 
+             (PGM_P)pgm_read_word(
+                  &(ng_magic_word_table[magic_word_id])), 
+             max_chars);
+}
+
+// This is the action callback that is executed when
+// a leader matches. 
+// Turns the string uppercase and adds some decoration.
+//
+static void ng_print_magic_word(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   uint8_t pos = (uint8_t)(uintptr_t)user_data;
+   
+//    uprintf("pos: %d\n", pos);
+   
+   char buffer[PPG_MAX_SEQUENCE_LENGTH];
+   
+   strncpy_P(buffer, (PGM_P)pgm_read_word(&(ng_magic_word_table[pos])), PPG_MAX_SEQUENCE_LENGTH);
+   
+//    uprintf("leader: %s\n", buffer);
+
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+      
+   for(int i = 0; buffer[i]; i++) {
+      
+      uint8_t kc = 0;
+      char c = buffer[i];
+
+      switch (c) {
+         case '0':
+            kc = KC_0;
+            break;
+         case '1' ... '9':
+            kc = c - '1' + KC_1;
+            break;
+         case 'a' ... 'z':
+            kc = c - 'a' + KC_A;
+            break;
+         case 'A' ... 'Z':
+            kc = c - 'A' + KC_A;
+            break;
+      }
+
+      if (kc) {
+         register_code16(S(kc));
+         unregister_code16(S(kc));
+         wait_ms(10);
+      }
+   }  
+   
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+}
+
+// A helper function that returns actions that are associated
+// with leader sequences.
+//
+PPG_Action ng_get_magic_word_string_action(uint8_t magic_word_id)
+{
+   return PPG_ACTION_USER_CALLBACK(
+      ng_print_magic_word,
+      (void*)(uintptr_t)magic_word_id
+   );
+}
+
+// User callback the emulates double tab for
+// shell auto completion
+//
 void double_tab_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
@@ -353,6 +691,9 @@ void double_tab_callback(bool activation, void *user_data)
    unregister_code (KC_TAB);
 }
 
+// User callback that repeats the most recent shell
+// command
+//
 void repeat_last_command_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
@@ -363,6 +704,11 @@ void repeat_last_command_callback(bool activation, void *user_data)
    unregister_code (KC_ENTER);
 }
 
+// Issues a search command that can be used with
+// any editor that is configured in a way that F1
+// opens the search entry with the string that the cursor
+// currently rests on.
+//
 void ordinary_search_command_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
@@ -373,6 +719,11 @@ void ordinary_search_command_callback(bool activation, void *user_data)
    unregister_code (KC_ENTER);
 }
 
+// Similar the search callback above, but for a search
+// in multiple files. This works with editors
+// that have been customized to feature Shift+F1
+// as command to open the search-in-files menu.
+//
 void file_search_command_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
@@ -385,6 +736,10 @@ void file_search_command_callback(bool activation, void *user_data)
    unregister_code (KC_ENTER);
 }
 
+// We need a callback to trigger the keyboard reset (to flash firmware)
+// as the RESET keycode is processed by the qmk system and is
+// for specific reason not available as Papageno keycode action.
+//
 void reset_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
@@ -392,16 +747,19 @@ void reset_callback(bool activation, void *user_data)
    reset_keyboard();
 }
 
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Definitions of Papageno patterns, tap-dances and leader sequences
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
+
 void init_papageno(void)
 {
    PPG_QMK_INIT
    
-   // When the abort key is pressed, pattern recognition is aborted
-   // the same as if timeout had occured.
-   //
-   //ppg_global_set_abort_trigger(PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ESC_KEY));
-   
-//    ppg_qmk_set_timeout_ms(20000);
    ppg_qmk_set_timeout_ms(200);
    
    /* Allow left inner and right inner thumb key to trigger key enter if
@@ -473,26 +831,6 @@ void init_papageno(void)
       // Matrix keypos...
       RIGHT_INNER_THUMB_KEY,  // right outer large thumb key
       LEFT_OUTER_THUMB_KEY // left inner large thumb key
-   );
-   
-   /* Define a secret chord that triggers flashing of 
-    * the keyboard software
-    */
-   ppg_token_set_flags(
-      PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
-         M0, // Layer
-         RESET, // Keycode action
-         // Matrix keypos...
-         LEFT_INNER_THUMB_KEY,
-         LEFT_OUTER_THUMB_KEY,
-         RIGHT_INNER_THUMB_KEY,
-         RIGHT_OUTER_THUMB_KEY
-      ),
-      
-      // Without the following the chord would consume all consequent
-      // releases and re-pressing of keys involved
-      //
-      PPG_Chord_Flags_Disallow_Input_Deactivation
    );
    
    // Double tap on S1 repeats last command (Up, Enter)
@@ -576,6 +914,48 @@ void init_papageno(void)
             )
          )
       )
+   );
+   
+   // The following defines a set of leader sequences
+   // Currently this is just used for demonstration 
+   // purposes.
+   
+   // First we define a leader token. This can be anything
+   // from a single note, a chord or cluster, a note sequence
+   // or tap dance. What ever returns a token can be used
+   // and serves as a basis for sequences.
+   //
+   PPG_Token leader_token
+      = 
+   ppg_token_set_flags(
+      PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
+         M0, // Layer
+         XXXXXXXXXXX, // No action. We use the chord only as leader
+         LEFT_OUTER_THUMB_KEY,
+         RIGHT_OUTER_THUMB_KEY
+      ),
+      
+      // Without the following the chord would consume all consequent
+      // releases and re-pressing of keys involved
+      //
+      PPG_Chord_Flags_Disallow_Input_Deactivation
+   );
+   
+   ppg_alphabetic_leader_sequences(
+      M0, // layer
+      leader_token,  // The leader input, use NULL if no leader key is 
+                     // wanted
+      sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
+      (PPG_Leader_Functions) {
+         .retreive_string = ng_get_magic_word_string,
+         .retreive_action = ng_get_magic_word_string_action,
+         .input_from_char = ng_input_from_alphabetic_character
+      },
+      true // Allow fallback, i.e. only require input until a sequence
+           // can be uniquely identified. Typing e.g. <leader>c or
+           // <leader>ca instead
+           // of <leader>cat yields the same action as long as the
+           // typed sequence is unambiguous.
    );
    
    ppg_global_compile();
