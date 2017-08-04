@@ -265,19 +265,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------------------------------------------------.
  * |  M3  |   q  |   w  |   d  |   f  |   k  |   j  |   u  |   r  |   l  |   ;  |  M3  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |  M2  |   a  |s/Alt |   e  |   t  |   g  |   y  |   n  |   i  |o/Alt |   h  |  M2  |
+ * |  M2  |   a  |   s  |   e  |   t  |   g  |   y  |   n  |   i  |   o  |   h  |  M2  |
  * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Ctrl |   z  |x/AltG|   c  |   v  |   b  |   p  |   m  |   ,  |./AltG|  /?  | Ctrl |
+ * | Ctrl |   z  |   x  |   c  |   v  |   b  |   p  |   m  |   ,  |   .  |  /?  | Ctrl |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |Cut/S3|Cpy/S4|Pst/S5| Down |Backsp|Shift |  M1  |Space |  Up  |  S1  |F7/S2 | ESC  |
+ * |Cut/S3|Cpy/S4|Pst/S5|  Alt |Backsp|Shift |  M1  |Space | Alt  |  S1  |F7/S2 | ESC  |
  * `-----------------------------------------------------------------------------------'
  */
    
   [M0] = FF_KEYMAP(
      OSL(M3)    ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,OSL(M3)    ,
-     OSL(M2)    ,KC_A       ,ALT_T(KC_S),KC_E       ,KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,KC_I       ,ALT_T(KC_O),LT(2,KC_H) ,OSL(M2)    ,
-     OSM(MOD_LCTL),KC_Z     ,ALGR_T(KC_X),KC_C      ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,ALGR_T(KC_DOT),KC_SLASH,OSM(MOD_LCTL),
-     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,KC_DOWN    ,KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,KC_UP      ,XXXXXXXXXXX,KC_F7      ,KC_ESC
+     OSL(M2)    ,KC_A       ,KC_S       ,KC_E       ,KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,KC_I       ,KC_O       ,KC_H       ,OSL(M2)    ,
+     OSM(MOD_LCTL),KC_Z     ,KC_X,KC_C  ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,KC_DOT,KC_SLASH,OSM(MOD_LCTL),
+     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT)      ,XXXXXXXXXXX,KC_F7      ,KC_ESC
   ),
 
 /* M1: Symbol
@@ -775,9 +775,6 @@ void init_papageno(void)
    
    /* Allow double tap of the left inner thumb key to be an alternative 
     * for double tab (shell completion).
-    * 
-    * Allow tripple tap of the left outer thumb key to be an alternative 
-    * enter.
     */
    ppg_tap_dance(
       M0,
@@ -789,12 +786,6 @@ void init_papageno(void)
             PPG_ACTION_USER_CALLBACK(
                double_tab_callback,
                NULL
-            )
-         ),
-         PPG_TAP(
-            3, 
-            PPG_QMK_ACTION_KEYCODE(
-               KC_ENTER
             )
          )
       )
@@ -891,12 +882,6 @@ void init_papageno(void)
             PPG_QMK_ACTION_KEYCODE(
                KC_F2
             )
-         ),
-         PPG_TAP(
-            3, 
-            PPG_QMK_ACTION_KEYCODE(
-               OSM(MOD_LSFT)
-            )
          )
       )
    );
@@ -916,6 +901,63 @@ void init_papageno(void)
       )
    );
    
+   // Tap dances for german umlauts (ä, ö, ü, ß)
+   //
+   // These are used together with the EURKEY keyboard layout
+   // that is available on Linux and Windows
+   
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_A), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               RALT(KC_A)
+            )
+         )
+      )
+   );
+   
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_O), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               RALT(KC_O)
+            )
+         )
+      )
+   );
+   
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_U), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               RALT(KC_U)
+            )
+         )
+      )
+   );
+   
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_S), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            3, 
+            PPG_QMK_ACTION_KEYCODE(
+               RALT(KC_S)
+            )
+         )
+      )
+   );
+//    
    // The following defines a set of leader sequences
    // Currently this is just used for demonstration 
    // purposes.
@@ -925,38 +967,38 @@ void init_papageno(void)
    // or tap dance. What ever returns a token can be used
    // and serves as a basis for sequences.
    //
-   PPG_Token leader_token
-      = 
-   ppg_token_set_flags(
-      PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
-         M0, // Layer
-         XXXXXXXXXXX, // No action. We use the chord only as leader
-         LEFT_OUTER_THUMB_KEY,
-         RIGHT_OUTER_THUMB_KEY
-      ),
-      
-      // Without the following the chord would consume all consequent
-      // releases and re-pressing of keys involved
-      //
-      PPG_Chord_Flags_Disallow_Input_Deactivation
-   );
-   
-   ppg_alphabetic_leader_sequences(
-      M0, // layer
-      leader_token,  // The leader input, use NULL if no leader key is 
-                     // wanted
-      sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
-      (PPG_Leader_Functions) {
-         .retreive_string = ng_get_magic_word_string,
-         .retreive_action = ng_get_magic_word_string_action,
-         .input_from_char = ng_input_from_alphabetic_character
-      },
-      true // Allow fallback, i.e. only require input until a sequence
-           // can be uniquely identified. Typing e.g. <leader>c or
-           // <leader>ca instead
-           // of <leader>cat yields the same action as long as the
-           // typed sequence is unambiguous.
-   );
+//    PPG_Token leader_token
+//       = 
+//    ppg_token_set_flags(
+//       PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
+//          M0, // Layer
+//          XXXXXXXXXXX, // No action. We use the chord only as leader
+//          LEFT_OUTER_THUMB_KEY,
+//          RIGHT_OUTER_THUMB_KEY
+//       ),
+//       
+//       // Without the following the chord would consume all consequent
+//       // releases and re-pressing of keys involved
+//       //
+//       PPG_Chord_Flags_Disallow_Input_Deactivation
+//    );
+//    
+//    ppg_alphabetic_leader_sequences(
+//       M0, // layer
+//       leader_token,  // The leader input, use NULL if no leader key is 
+//                      // wanted
+//       sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
+//       (PPG_Leader_Functions) {
+//          .retreive_string = ng_get_magic_word_string,
+//          .retreive_action = ng_get_magic_word_string_action,
+//          .input_from_char = ng_input_from_alphabetic_character
+//       },
+//       true // Allow fallback, i.e. only require input until a sequence
+//            // can be uniquely identified. Typing e.g. <leader>c or
+//            // <leader>ca instead
+//            // of <leader>cat yields the same action as long as the
+//            // typed sequence is unambiguous.
+//    );
    
    ppg_global_compile();
 }

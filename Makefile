@@ -4,10 +4,9 @@ COMMAND_ENABLE = no        # Commands for debug and configuration
 SLEEP_LED_ENABLE = no    # Breathing sleep LED during USB suspend
 FORCE_NKRO ?= yes
 DEBUG_ENABLE = no
-CONSOLE_ENABLE = yes
+CONSOLE_ENABLE = no
 TAP_DANCE_ENABLE = no
 PAPAGENO_ENABLE = yes
-# PAPAGENO_ENABLE = no
 KEYLOGGER_ENABLE ?= no
 UCIS_ENABLE = no
 MOUSEKEY_ENABLE = no
@@ -41,7 +40,7 @@ OPT_DEFS += -DKEYLOGGER_ENABLE
 CONSOLE_ENABLE = yes
 endif
 
-OPT_DEFS += -DUSER_PRINT
+# OPT_DEFS += -DUSER_PRINT
 # OPT_DEFS += -DDEBUG_ACTION
 
 KEYMAP_VERSION = $(shell \
