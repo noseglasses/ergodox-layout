@@ -1,3 +1,19 @@
+/* Copyright 2017 Florian Fleissner
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #define PERMISSIVE_HOLD
 // #define PREVENT_STUCK_MODIFIERS
 
@@ -7,6 +23,14 @@
 // what is defined through the config.h header
 
 #ifdef KEYBOARDS_ERGODOX_CONFIG_H_
+
+   // Define SUBPROJECT_ez explicitly to ensure that
+   // it is define during compression builds
+   //
+   #ifndef SUBPROJECT_ez
+   #define SUBPROJECT_ez
+   #endif
+
    #include "ergodox.h"
 #else
    #include "planck.h"
@@ -25,6 +49,24 @@
 #ifdef PAPAGENO_ENABLE
 #include "process_papageno.h"
 #endif
+
+#include <avr/io.h>
+#include <stdio.h>
+
+#define UCSR0A UCSR1A
+#define UDRE0 UDRE1
+#define UDR0 UDR1
+
+static int uart_putchar(char c, FILE *stream) {
+   if (c == '\n')
+     uart_putchar('\r', stream);
+   loop_until_bit_is_set(UCSR0A, UDRE0);  
+   UDR0 = c;
+   return 0;
+}
+
+static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
+
 
 enum custom_keycodes {
   PLACEHOLDER = SAFE_RANGE, // can always be here
@@ -276,8 +318,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [M0] = FF_KEYMAP(
      OSL(M3)    ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,OSL(M3)    ,
      OSL(M2)    ,KC_A       ,KC_S       ,KC_E       ,KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,KC_I       ,KC_O       ,KC_H       ,OSL(M2)    ,
-     OSM(MOD_LCTL),KC_Z     ,KC_X,KC_C  ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,KC_DOT,KC_SLASH,OSM(MOD_LCTL),
-     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE  ,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT)      ,XXXXXXXXXXX,KC_F7      ,KC_ESC
+     OSM(MOD_LCTL),KC_Z     ,KC_X       ,KC_C       ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,KC_DOT     ,KC_SLASH   ,OSM(MOD_LCTL),
+     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT),XXXXXXXXXXX,KC_F7    ,KC_ESC
   ),
 
 /* M1: Symbol
@@ -760,6 +802,17 @@ void init_papageno(void)
 {
    PPG_QMK_INIT
    
+   // Only list symbols here that are required after initialization
+   //
+   // Note: The functions passed as PPG_Leader_Functions are only required
+   //       during setup.
+   // 
+   PPG_QMK_COMPRESSION_REGISTER_SYMBOL(double_tab_callback)
+   PPG_QMK_COMPRESSION_REGISTER_SYMBOL(repeat_last_command_callback)
+   PPG_QMK_COMPRESSION_REGISTER_SYMBOL(ordinary_search_command_callback)
+   PPG_QMK_COMPRESSION_REGISTER_SYMBOL(file_search_command_callback)
+   PPG_QMK_COMPRESSION_REGISTER_SYMBOL(reset_callback)
+   
    ppg_qmk_set_timeout_ms(200);
    
    /* Allow left inner and right inner thumb key to trigger key enter if
@@ -967,40 +1020,40 @@ void init_papageno(void)
    // or tap dance. What ever returns a token can be used
    // and serves as a basis for sequences.
    //
-//    PPG_Token leader_token
-//       = 
-//    ppg_token_set_flags(
-//       PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
-//          M0, // Layer
-//          XXXXXXXXXXX, // No action. We use the chord only as leader
-//          LEFT_OUTER_THUMB_KEY,
-//          RIGHT_OUTER_THUMB_KEY
-//       ),
-//       
-//       // Without the following the chord would consume all consequent
-//       // releases and re-pressing of keys involved
-//       //
-//       PPG_Chord_Flags_Disallow_Input_Deactivation
-//    );
-//    
-//    ppg_alphabetic_leader_sequences(
-//       M0, // layer
-//       leader_token,  // The leader input, use NULL if no leader key is 
-//                      // wanted
-//       sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
-//       (PPG_Leader_Functions) {
-//          .retreive_string = ng_get_magic_word_string,
-//          .retreive_action = ng_get_magic_word_string_action,
-//          .input_from_char = ng_input_from_alphabetic_character
-//       },
-//       true // Allow fallback, i.e. only require input until a sequence
-//            // can be uniquely identified. Typing e.g. <leader>c or
-//            // <leader>ca instead
-//            // of <leader>cat yields the same action as long as the
-//            // typed sequence is unambiguous.
-//    );
+   PPG_Token leader_token
+      = 
+   ppg_token_set_flags(
+      PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
+         M0, // Layer
+         XXXXXXXXXXX, // No action. We use the chord only as leader
+         LEFT_OUTER_THUMB_KEY,
+         RIGHT_OUTER_THUMB_KEY
+      ),
+      
+      // Without the following the chord would consume all consequent
+      // releases and re-pressing of keys involved
+      //
+      PPG_Chord_Flags_Disallow_Input_Deactivation
+   );
    
-   ppg_global_compile();
+   ppg_alphabetic_leader_sequences(
+      M0, // layer
+      leader_token,  // The leader input, use NULL if no leader key is 
+                     // wanted
+      sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
+      (PPG_Leader_Functions) {
+         .retreive_string = ng_get_magic_word_string,
+         .retreive_action = ng_get_magic_word_string_action,
+         .input_from_char = ng_input_from_alphabetic_character
+      },
+      true // Allow fallback, i.e. only require input until a sequence
+           // can be uniquely identified. Typing e.g. <leader>c or
+           // <leader>ca instead
+           // of <leader>cat yields the same action as long as the
+           // typed sequence is unambiguous.
+   );
+   
+   PPG_QMK_COMPILE
 }
 
 #endif
@@ -1035,6 +1088,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 void matrix_init_user(void) { 
    
+   stdout = &mystdout;
+   
    #ifdef PAPAGENO_ENABLE
    init_papageno();
    #endif
@@ -1045,6 +1100,8 @@ void matrix_init_user(void) {
 }
 
 void matrix_scan_user(void) {
+   
+   printf("Bla\n");
     
 //    PPG_LOG("Matrix scan user\n");
    

@@ -40,7 +40,7 @@ OPT_DEFS += -DKEYLOGGER_ENABLE
 CONSOLE_ENABLE = yes
 endif
 
-# OPT_DEFS += -DUSER_PRINT
+OPT_DEFS += -DUSER_PRINT
 # OPT_DEFS += -DDEBUG_ACTION
 
 KEYMAP_VERSION = $(shell \
@@ -55,6 +55,27 @@ KEYMAP_BRANCH = $(shell \
  git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
 OPT_DEFS += -DKEYMAP_VERSION=\"$(KEYMAP_VERSION)\\\#$(KEYMAP_BRANCH)\"
+# 
+# LIBDIR      := /home/flo/Software/simavr/simavr/simavr/obj-x86_64-linux-gnu
+# LDFLAGS  += -Wl,-L${LIBDIR} -Wl,/home/flo/Software/simavr/simavr/simavr/obj-x86_64-linux-gnu/libsimavr.a
+
+# LDFLAGS= -Wl,-u,vfprintfs -lprintf_min
+
+#---------------- Library Options ----------------
+# Minimalistic printf version
+PRINTF_LIB_MIN = -Wl,-u,vfprintf -lprintf_min
+
+# Floating point printf version (requires MATH_LIB = -lm below)
+PRINTF_LIB_FLOAT = -Wl,-u,vfprintf -lprintf_flt
+
+# If this is left blank, then it will use the Standard printf version.
+# PRINTF_LIB = 
+PRINTF_LIB = $(PRINTF_LIB_MIN)
+#PRINTF_LIB = $(PRINTF_LIB_FLOAT)
+
+
+LDFLAGS += $(PRINTF_LIB) 
+CFLAGS += -g
 
 ifndef QUANTUM_DIR
 	include ../../../../Makefile
