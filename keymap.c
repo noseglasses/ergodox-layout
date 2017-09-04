@@ -791,8 +791,8 @@ void init_papageno(void)
       )
    );
       
-   /* Allow left inner and right outer thumb key to trigger key tab if
-    * clustered.
+   /* Allow left inner and right outer thumb key to trigger key tab when
+    * hit consecutively.
     */
    PPG_QMK_KEYPOS_NOTE_LINE_ACTION_KEYCODE(
       M0, // Layer
@@ -802,8 +802,8 @@ void init_papageno(void)
       RIGHT_OUTER_THUMB_KEY  // right outer large thumb key
    );
          
-   /* Allow left inner and right outer thumb key to trigger key untab if
-    * clustered.
+   /* Allow left inner and right outer thumb key to trigger key untab when
+    * hit consecutively.
     */
    PPG_QMK_KEYPOS_NOTE_LINE_ACTION_KEYCODE(
       M0, // Layer
@@ -813,8 +813,8 @@ void init_papageno(void)
       LEFT_INNER_THUMB_KEY // left inner large thumb key
    );
    
-   /* Allow left outer and right inner thumb key to trigger Del key if
-    * clustered.
+   /* Allow right inner and left outer thumb key to trigger Del key when
+    * hit consecutively.
     */
    PPG_QMK_KEYPOS_NOTE_LINE_ACTION_KEYCODE(
       M0, // Layer
