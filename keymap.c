@@ -203,9 +203,11 @@ enum ff_layers {
 
 #define NG_SWAP_ROW_COL(ROW, COL) COL, ROW
 
+#define NG_PASS_QMK_KEYPOS_HEX(S1, S2) PPG_QMK_KEYPOS_HEX(S1, S2)
+
 // Planck swaps rows and cols in comparison to planck (or vice versa?)
 //
-#define NG_KEYPOS(KEY_ALIAS, S) PPG_QMK_KEYPOS_HEX(NG_SWAP_ROW_COL(KEY_ALIAS), S)
+#define NG_KEYPOS(KEY_ALIAS, S) NG_PASS_QMK_KEYPOS_HEX(NG_SWAP_ROW_COL(KEY_ALIAS), S)
 
 #endif
 
