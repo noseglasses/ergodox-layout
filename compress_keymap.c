@@ -14,7 +14,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-extern void init_papageno(void);
+#include "ng_papageno_settings.h"
 
 int main(int argc, char **argv)
 {

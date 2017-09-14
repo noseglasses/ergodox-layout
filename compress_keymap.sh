@@ -17,6 +17,8 @@ CUR_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 QUANTUM_DIR=${CUR_DIR}/../../../../quantum
 BASE_DIR=${CUR_DIR}/../../../..
 
+QMK_OBJECTS=`cat ${BASE_DIR}/.build/obj_planck_rev4_noseglasses/obj.txt`
+
 avr-gcc \
    \
    -mmcu=atmega32u4 \
@@ -29,7 +31,6 @@ avr-gcc \
    -fshort-enums \
    -fno-inline-small-functions \
    -fno-strict-aliasing \
-   -fdiagnostics-color \
    \
    -gdwarf-2 \
    \
@@ -94,4 +95,6 @@ avr-gcc \
    \
    ${CUR_DIR}/keymap.c \
    ${CUR_DIR}/compress_keymap.c \
-   ${CUR_DIR}/../../../../quantum/process_keycode/process_papageno.c
+   ${CUR_DIR}/../../../../quantum/process_keycode/process_papageno.c \
+   \
+   ${BASE_DIR}/lib/papageno/build/avr-gcc/src/libpapageno.a
