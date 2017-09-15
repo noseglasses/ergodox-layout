@@ -16,8 +16,27 @@
 
 #include "ng_papageno_settings.h"
 
-int main(int argc, char **argv)
-{
+static int uart_putchar(char c, FILE *stream) {
+  if (c == '\n')
+    uart_putchar('\r', stream);
+  loop_until_bit_is_set(UCSR1A, UDRE1);
+  UDR1 = c;
+  return 0;
+}
+
+static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
+                                         _FDEV_SETUP_WRITE);
+ 
+// ********************************************************************************
+// Main
+// ********************************************************************************
+int main(int argc, char **argv) {
+ 
+    // setup our stdio stream
+    stdout = &mystdout;
+    
+    printf("compress_keymap printf initialized\n");
+
    init_papageno();
    
    return 0;

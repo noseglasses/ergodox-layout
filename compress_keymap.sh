@@ -63,16 +63,15 @@ avr-gcc \
    -DUSE_FLASH_DESCRIPTORS \
    -DUSE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB  _OPT_REG_ENABLED | USB_OPT_AUTO_PLL)" \
    -DFIXED_CONTROL_ENDPOINT_SIZE=8 \
-   -DFIXED_CONTROL_ENDPOINT_SIZE=8 \
    -DFIXED_NUM_CONFIGURATIONS=1 \
    -DPROTOCOL_LUFA \
    -DF_CPU=16000000UL \
-   -DQMK_KEYBOARD=\"ergodox\" \
+   -DQMK_KEYBOARD=\"planck\" \
    -DQMK_KEYMAP=\"noseglasses\" \
     \
-   -I${BASE_DIR}/keyboards/ergodox/keymaps/noseglasses \
-   -I${BASE_DIR}/keyboards/ergodox/ez \
-   -I${BASE_DIR}/keyboards/ergodox \
+   -I${BASE_DIR}/keyboards/planck/keymaps/noseglasses \
+   -I${BASE_DIR}/keyboards/planck/ez \
+   -I${BASE_DIR}/keyboards/planck \
    -I${BASE_DIR}/. \
    -I${BASE_DIR}/./tmk_core \
    -I${BASE_DIR}/./quantum \
@@ -91,10 +90,10 @@ avr-gcc \
    -I${BASE_DIR}/quantum/../lib/papageno/3rd_party \
    -I${BASE_DIR}/quantum/../lib/papageno/build/avr-gcc/src \
     \
-   -include keyboards/ergodox/keymaps/noseglasses/config.h \
+   -include keyboards/planck/keymaps/noseglasses/config.h \
    \
-   ${CUR_DIR}/keymap.c \
    ${CUR_DIR}/compress_keymap.c \
-   ${CUR_DIR}/../../../../quantum/process_keycode/process_papageno.c \
    \
    ${BASE_DIR}/lib/papageno/build/avr-gcc/src/libpapageno.a
+
+#    ${CUR_DIR}/../../../../quantum/process_keycode/process_papageno.c \

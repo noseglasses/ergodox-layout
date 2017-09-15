@@ -1,5 +1,9 @@
+#ifndef NG_PAPAGENO_SETTINGS_H
+#define NG_PAPAGENO_SETTINGS_H
 
+#include "process_papageno.h"
 #include "ng_layer_settings.h"
+#include "ng_portable_keymap.h"
 
 // Define a bunch of key positions that are going to be used as 
 // Papageno inputs. 
@@ -111,25 +115,296 @@ __NL__      PPG_QMK_MATRIX_POSITION_INPUTS_ALPHABETIC(OP)
 //
 #define PPG_QMK_KEYCODE_INPUTS(OP)
 
+// Initialize Papageno data structures for qmk
+// This is based on the definitions of 
+//
+//    PPG_QMK_MATRIX_POSITION_INPUTS
+//
+// and
+//
+//    PPG_QMK_KEYCODE_INPUTS
+//
+PPG_QMK_INIT_DATA_STRUCTURES
+
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Definitions of inventory for Papageno leader sequences
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
+
+#define NG_GLUE_AUX(S1, S2) S1##S2
+#define NG_GLUE(S1, S2) NG_GLUE_AUX(S1, S2)
+   
+#define NG_ALPH_CASE(LOWER_CASE_QUOTED, UPPER_CASE_QUOTED, ID) \
+__NL__         case LOWER_CASE_QUOTED: \
+__NL__         case UPPER_CASE_QUOTED: \
+__NL__            return PPG_QMK_KEYPOS_ENUM(NG_GLUE(ALPH_KEY_, ID));
+
+// For compression we use stubs instead of the actual
+// callback functions
+//
+#if !PAPAGENO_COMPRESSION_ENABLED
+
+// Define an input lookup function that maps alphabetic characters
+// to inputs. This is based on the definition of the macros ALPH_KEY_*
+// above. If you use a different keylayout (i.e. not Norman) change
+// the definitions of ALPH_KEY_* accordingly.
+//
+PPG_Input_Id ng_input_from_alphabetic_character(char c) {
+   
+   switch(c) {
+      NG_ALPH_CASE('a', 'A', A)
+      NG_ALPH_CASE('b', 'B', B)
+      NG_ALPH_CASE('c', 'C', C)
+      NG_ALPH_CASE('d', 'D', D)
+      NG_ALPH_CASE('e', 'E', E)
+      NG_ALPH_CASE('f', 'F', F)
+      NG_ALPH_CASE('g', 'G', G)
+      NG_ALPH_CASE('h', 'H', H)
+      NG_ALPH_CASE('i', 'I', I)
+      NG_ALPH_CASE('j', 'J', J)
+      NG_ALPH_CASE('k', 'K', K)
+      NG_ALPH_CASE('l', 'L', L)
+      NG_ALPH_CASE('m', 'M', M)
+      NG_ALPH_CASE('n', 'N', N)
+      NG_ALPH_CASE('o', 'O', O)
+      NG_ALPH_CASE('p', 'P', P)
+      NG_ALPH_CASE('q', 'Q', Q)
+      NG_ALPH_CASE('r', 'R', R)
+      NG_ALPH_CASE('s', 'S', S)
+      NG_ALPH_CASE('t', 'T', T)
+      NG_ALPH_CASE('u', 'U', U)
+      NG_ALPH_CASE('v', 'V', V)
+      NG_ALPH_CASE('w', 'W', W)
+      NG_ALPH_CASE('x', 'X', X)
+      NG_ALPH_CASE('y', 'Y', Y)
+      NG_ALPH_CASE('z', 'Z', Z)
+   }
+   
+   return 0;
+}
+
+// This demonstrates the use of Papageno to process leader
+// keys. Currently we do nothing else than replace some keywords
+// with their upper case representations.
+
+const char string_1[] PROGMEM = "cool";
+const char string_2[] PROGMEM = "cat";
+const char string_3[] PROGMEM = "dog";
+
+// Important: If you change the number of entries in
+//            ng_magic_word_table, make sure to adjust the number of
+//             entries wherever ng_magic_word_table is used
+//
+PGM_P const ng_magic_word_table[] PROGMEM = 
+{
+   string_1,
+   string_2,
+   string_3
+};
+
+void ng_get_magic_word_string(uint8_t magic_word_id,
+                              char *buffer, 
+                              uint8_t max_chars)
+{
+   strncpy_P(buffer, 
+             (PGM_P)pgm_read_word(
+                  &(ng_magic_word_table[magic_word_id])), 
+             max_chars);
+}
+
+// This is the action callback that is executed when
+// a leader matches. 
+// Turns the string uppercase and adds some decoration.
+//
+static void ng_print_magic_word(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   uint8_t pos = (uint8_t)(uintptr_t)user_data;
+   
+//    uprintf("pos: %d\n", pos);
+   
+   char buffer[PPG_MAX_SEQUENCE_LENGTH];
+   
+   strncpy_P(buffer, (PGM_P)pgm_read_word(&(ng_magic_word_table[pos])), PPG_MAX_SEQUENCE_LENGTH);
+   
+//    uprintf("leader: %s\n", buffer);
+
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+      
+   for(int i = 0; buffer[i]; i++) {
+      
+      uint8_t kc = 0;
+      char c = buffer[i];
+
+      switch (c) {
+         case '0':
+            kc = KC_0;
+            break;
+         case '1' ... '9':
+            kc = c - '1' + KC_1;
+            break;
+         case 'a' ... 'z':
+            kc = c - 'a' + KC_A;
+            break;
+         case 'A' ... 'Z':
+            kc = c - 'A' + KC_A;
+            break;
+      }
+
+      if (kc) {
+         register_code16(S(kc));
+         unregister_code16(S(kc));
+         wait_ms(10);
+      }
+   }  
+   
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+   register_code16(KC_ASTR);
+   unregister_code16(KC_ASTR);
+}
+
+// A helper function that returns actions that are associated
+// with leader sequences.
+//
+PPG_Action ng_get_magic_word_string_action(uint8_t magic_word_id)
+{
+   return PPG_ACTION_USER_CALLBACK(
+      ng_print_magic_word,
+      (void*)(uintptr_t)magic_word_id
+   );
+}
+
+// User callback the emulates double tab for
+// shell auto completion
+//
+void ng_double_tab_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   register_code (KC_TAB);
+   unregister_code (KC_TAB);
+   register_code (KC_TAB);
+   unregister_code (KC_TAB);
+}
+
+// User callback that repeats the most recent shell
+// command
+//
+void ng_repeat_last_command_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   register_code (KC_UP);
+   unregister_code (KC_UP);
+   register_code (KC_ENTER);
+   unregister_code (KC_ENTER);
+}
+
+// Issues a search command that can be used with
+// any editor that is configured in a way that F1
+// opens the search entry with the string that the cursor
+// currently rests on.
+//
+void ng_ordinary_search_command_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   register_code16 (KC_F1);
+   unregister_code16 (KC_F1);
+   register_code (KC_ENTER);
+   unregister_code (KC_ENTER);
+}
+
+// Similar the search callback above, but for a search
+// in multiple files. This works with editors
+// that have been customized to feature Shift+F1
+// as command to open the search-in-files menu.
+//
+void ng_file_search_command_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   register_code16 (S(KC_F1));
+   send_keyboard_report();
+   unregister_code16 (S(KC_F1));
+   send_keyboard_report();
+   register_code (KC_ENTER);
+   unregister_code (KC_ENTER);
+}
+
+// We need a callback to trigger the keyboard reset (to flash firmware)
+// as the RESET keycode is processed by the qmk system and is
+// for specific reason not available as Papageno keycode action.
+//
+void ng_reset_callback(bool activation, void *user_data)
+{
+   if(!activation) { return; }
+   
+   reset_keyboard();
+}
+
+void action_exec_user(keyevent_t event)
+{
+   // Just for debugging with debug mode enabled (DEBUG-keycode)
+   //
+//    debug_config.matrix = true;
+//    debug_config.keyboard = true;
+//    debug_config.mouse = true;
+   
+   #ifdef PAPAGENO_ENABLE
+   ppg_qmk_process_event(event);
+   #else
+   action_exec(event);
+   #endif
+}
+
+#endif // #if !PAPAGENO_COMPRESSION_ENABLED
+
 // Define stubs for compression
 //
 #if PAPAGENO_COMPRESSION_ENABLED
 
 #define NG_PPG_SYMBOLS(S) \
-   S(double_tab_callback) \
-   S(repeat_last_command_callback) \
-   S(ordinary_search_command_callback) \
-   S(file_search_command_callback) \
-   S(reset_callback)
+   S(ng_double_tab_callback) \
+   S(ng_repeat_last_command_callback) \
+   S(ng_ordinary_search_command_callback) \
+   S(ng_file_search_command_callback) \
+   S(ng_reset_callback) \
+   S(ng_get_magic_word_string) \
+   S(ng_get_magic_word_string_action) \
+   S(ng_input_from_alphabetic_character)
 
 PPG_QMK_COMPRESSION_PREPARE_SYMBOLS(NG_PPG_SYMBOLS)
 
 #endif
+// ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
+//  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
+// (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
+//
+// Definitions of Papageno patterns, tap-dances and leader sequences
+//  ______  ______  ______  ______  ______  ______  ______  ______  ______  ____
+// (__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  
+// ___)(______)(______)(______)(______)(______)(______)(______)(______)(______)
 
 void init_papageno(void)
 {
+   printf("initializing qmk...\n");
    PPG_QMK_INIT
    
+   printf("registering symbols...\n");
    // Only list symbols here that are required after initialization
    //
    // Note: The functions passed as PPG_Leader_Functions are only required
@@ -139,6 +414,7 @@ void init_papageno(void)
    
    ppg_qmk_set_timeout_ms(200);
    
+   printf("startin tree definition...\n");
    /* Allow left inner and right inner thumb key to trigger key enter if
     * clustered.
     */
@@ -161,7 +437,7 @@ void init_papageno(void)
          PPG_TAP(
             2, 
             PPG_ACTION_USER_CALLBACK(
-               double_tab_callback,
+               ng_double_tab_callback,
                NULL
             )
          )
@@ -210,7 +486,7 @@ void init_papageno(void)
          PPG_TAP(
             2, 
             PPG_ACTION_USER_CALLBACK(
-               repeat_last_command_callback,
+               ng_repeat_last_command_callback,
                NULL
             )
          )
@@ -227,21 +503,21 @@ void init_papageno(void)
          PPG_TAP(
             2, 
             PPG_ACTION_USER_CALLBACK(
-               ordinary_search_command_callback,
+               ng_ordinary_search_command_callback,
                NULL
             )
          ),
          PPG_TAP(
             3, 
             PPG_ACTION_USER_CALLBACK(
-               file_search_command_callback,
+               ng_file_search_command_callback,
                NULL
             )
          ),
          PPG_TAP(
             5, 
             PPG_ACTION_USER_CALLBACK(
-               reset_callback,
+               ng_reset_callback,
                NULL
             )
          )
@@ -364,11 +640,14 @@ void init_papageno(void)
       M0, // layer
       leader_token,  // The leader input, use NULL if no leader key is 
                      // wanted
-      sizeof(ng_magic_word_table)/sizeof(PGM_P), // number of sequences
+      3, // number of entries in ng_magic_word_table
       (PPG_Leader_Functions) {
-         .retreive_string = ng_get_magic_word_string,
-         .retreive_action = ng_get_magic_word_string_action,
-         .input_from_char = ng_input_from_alphabetic_character
+         .retreive_string = (PPG_Leader_String_Retreival_Callback)      
+                                 ng_get_magic_word_string,
+         .retreive_action = (PPG_Leader_Action_Retreival_Callback)
+                                 ng_get_magic_word_string_action,
+         .input_from_char = (PPG_Leader_Character_To_Input_Callback)
+                                 ng_input_from_alphabetic_character
       },
       true // Allow fallback, i.e. only require input until a sequence
            // can be uniquely identified. Typing e.g. <leader>c or
@@ -377,5 +656,9 @@ void init_papageno(void)
            // typed sequence is unambiguous.
    );
    
+   printf("qmk tree setup completed\n");
+   
    PPG_QMK_COMPILE
 }
+
+#endif
