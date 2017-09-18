@@ -610,7 +610,7 @@ void init_papageno(void)
          )
       )
    );
-//    
+   
    // The following defines a set of leader sequences
    // Currently this is just used for demonstration 
    // purposes.

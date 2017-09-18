@@ -16,10 +16,13 @@
 
 #include "ng_papageno_settings.h"
 
+#include <avr/io.h>
+
 static int uart_putchar(char c, FILE *stream) {
   if (c == '\n')
     uart_putchar('\r', stream);
-  loop_until_bit_is_set(UCSR1A, UDRE1);
+//   loop_until_bit_is_set(UCSR1A, UDRE1);
+  while(!(UCSR0A & _BV(UDRE0)));
   UDR1 = c;
   return 0;
 }

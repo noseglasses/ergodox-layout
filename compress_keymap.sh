@@ -18,10 +18,11 @@ QUANTUM_DIR=${CUR_DIR}/../../../../quantum
 BASE_DIR=${CUR_DIR}/../../../..
 
 QMK_OBJECTS=`cat ${BASE_DIR}/.build/obj_planck_rev4_noseglasses/obj.txt`
-
+  
+#   -mmcu=atmega128 \
 avr-gcc \
    \
-   -mmcu=atmega32u4 \
+  -mmcu=atmega1280 \
    \
    -funsigned-char \
    -funsigned-bitfields \
@@ -57,9 +58,7 @@ avr-gcc \
    -DNO_DEBUG \
    -DNKRO_ENABLE \
    -DONEHAND_ENABLE \
-   -DF_USB=16000000UL \
    -DARCH=ARCH_AVR8 \
-   -DUSB_DEVICE_ONLY \
    -DUSE_FLASH_DESCRIPTORS \
    -DUSE_STATIC_OPTIONS="(USB_DEVICE_OPT_FULLSPEED | USB  _OPT_REG_ENABLED | USB_OPT_AUTO_PLL)" \
    -DFIXED_CONTROL_ENDPOINT_SIZE=8 \
@@ -95,5 +94,3 @@ avr-gcc \
    ${CUR_DIR}/compress_keymap.c \
    \
    ${BASE_DIR}/lib/papageno/build/avr-gcc/src/libpapageno.a
-
-#    ${CUR_DIR}/../../../../quantum/process_keycode/process_papageno.c \
