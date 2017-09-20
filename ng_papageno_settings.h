@@ -375,12 +375,10 @@ void action_exec_user(keyevent_t event)
    #endif
 }
 
-#endif // #if !PAPAGENO_COMPRESSION_ENABLED
+#else // #if PAPAGENO_COMPRESSION_ENABLED
 
 // Define stubs for compression
 //
-#if PAPAGENO_COMPRESSION_ENABLED
-
 #define NG_PPG_SYMBOLS(S) \
    S(ng_double_tab_callback) \
    S(ng_repeat_last_command_callback) \
@@ -393,7 +391,7 @@ void action_exec_user(keyevent_t event)
 
 PPG_QMK_COMPRESSION_PREPARE_SYMBOLS(NG_PPG_SYMBOLS)
 
-#endif
+#endif // #if PAPAGENO_COMPRESSION_ENABLED
 // ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  
 //  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)
 // (______)(______)(______)(______)(______)(______)(______)(______)(______)(____
@@ -405,12 +403,12 @@ PPG_QMK_COMPRESSION_PREPARE_SYMBOLS(NG_PPG_SYMBOLS)
 
 void init_papageno(void)
 {
-   PPG_QMK_INIT
-   
    // Only if compression of the papageno data structures 
    // is desired, the actual tree specification is considered
    //
    #if PAPAGENO_COMPRESSION_ENABLED
+   
+   PPG_QMK_INIT
    
    // Only list symbols here that are required after initialization
    //
@@ -431,7 +429,8 @@ void init_papageno(void)
       LEFT_INNER_THUMB_KEY, // left inner large thumb key
       RIGHT_INNER_THUMB_KEY  // right inner large thumb key
    );
-   
+#if 0
+  
    /* Allow double tap of the left inner thumb key to be an alternative 
     * for double tab (shell completion).
     */
@@ -617,6 +616,7 @@ void init_papageno(void)
       )
    );
    
+   
    // The following defines a set of leader sequences
    // Currently this is just used for demonstration 
    // purposes.
@@ -641,7 +641,6 @@ void init_papageno(void)
       //
       PPG_Chord_Flags_Disallow_Input_Deactivation
    );
-   
    ppg_alphabetic_leader_sequences(
       M0, // layer
       leader_token,  // The leader input, use NULL if no leader key is 
@@ -662,11 +661,14 @@ void init_papageno(void)
            // typed sequence is unambiguous.
    );
    
-   #else
-   PPG_INITIALIZE_CONTEXT_noseglasses
-   #endif
+#endif
    
    PPG_QMK_COMPILE
+   
+   #else // #if PAPAGENO_COMPRESSION_ENABLED
+   PPG_INITIALIZE_CONTEXT_noseglasses
+   PPG_QMK_SETUP_NON_DEFAULT_MANAGERS
+   #endif // #if PAPAGENO_COMPRESSION_ENABLED
 }
 
 #endif

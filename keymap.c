@@ -261,8 +261,6 @@ void matrix_init_user(void) {
 }
 
 void matrix_scan_user(void) {
-   
-   printf("Bla\n");
     
 //    PPG_LOG("Matrix scan user\n");
    
