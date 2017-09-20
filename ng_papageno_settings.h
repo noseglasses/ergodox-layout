@@ -5,6 +5,10 @@
 #include "ng_layer_settings.h"
 #include "ng_portable_keymap.h"
 
+#if !PAPAGENO_COMPRESSION_ENABLED
+#include "compressed_keymap.h"
+#endif
+
 // Define a bunch of key positions that are going to be used as 
 // Papageno inputs. 
 //
@@ -401,10 +405,13 @@ PPG_QMK_COMPRESSION_PREPARE_SYMBOLS(NG_PPG_SYMBOLS)
 
 void init_papageno(void)
 {
-   printf("initializing qmk...\n");
    PPG_QMK_INIT
    
-   printf("registering symbols...\n");
+   // Only if compression of the papageno data structures 
+   // is desired, the actual tree specification is considered
+   //
+   #if PAPAGENO_COMPRESSION_ENABLED
+   
    // Only list symbols here that are required after initialization
    //
    // Note: The functions passed as PPG_Leader_Functions are only required
@@ -414,7 +421,6 @@ void init_papageno(void)
    
    ppg_qmk_set_timeout_ms(200);
    
-   printf("startin tree definition...\n");
    /* Allow left inner and right inner thumb key to trigger key enter if
     * clustered.
     */
@@ -656,7 +662,9 @@ void init_papageno(void)
            // typed sequence is unambiguous.
    );
    
-   printf("qmk tree setup completed\n");
+   #else
+   PPG_INITIALIZE_CONTEXT_noseglasses
+   #endif
    
    PPG_QMK_COMPILE
 }

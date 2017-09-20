@@ -17,6 +17,8 @@
 #include "ng_papageno_settings.h"
 
 #include <avr/io.h>
+#include <avr/interrupt.h>
+#include <avr/sleep.h>
 
 static int uart_putchar(char c, FILE *stream) {
   if (c == '\n')
@@ -33,14 +35,13 @@ static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
 // ********************************************************************************
 // Main
 // ********************************************************************************
-int main(int argc, char **argv) {
+int main(int argc, char**argv) {
  
     // setup our stdio stream
     stdout = &mystdout;
-    
-    printf("compress_keymap printf initialized\n");
 
    init_papageno();
    
-   return 0;
+	cli();
+	sleep_mode();
 }
