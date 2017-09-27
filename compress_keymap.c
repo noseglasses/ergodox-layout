@@ -31,6 +31,14 @@ static int uart_putchar(char c, FILE *stream) {
 
 static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL,
                                          _FDEV_SETUP_WRITE);
+
+// Just a dummy to enable linkage withoud
+// the need to link actual qmk related stuff
+//
+int __xprintf(const char *format, ...)
+{
+   return 0;
+}
  
 // ********************************************************************************
 // Main

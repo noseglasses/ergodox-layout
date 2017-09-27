@@ -367,6 +367,8 @@ void action_exec_user(keyevent_t event)
 //    debug_config.matrix = true;
 //    debug_config.keyboard = true;
 //    debug_config.mouse = true;
+//    
+//   
    
    #ifdef PAPAGENO_ENABLE
    ppg_qmk_process_event(event);
@@ -419,6 +421,8 @@ void init_papageno(void)
    
    ppg_qmk_set_timeout_ms(200);
    
+//    ppg_global_set_timeout_enabled(false);
+   
    /* Allow left inner and right inner thumb key to trigger key enter if
     * clustered.
     */
@@ -429,7 +433,6 @@ void init_papageno(void)
       LEFT_INNER_THUMB_KEY, // left inner large thumb key
       RIGHT_INNER_THUMB_KEY  // right inner large thumb key
    );
-#if 0
   
    /* Allow double tap of the left inner thumb key to be an alternative 
     * for double tab (shell completion).
@@ -616,7 +619,6 @@ void init_papageno(void)
       )
    );
    
-   
    // The following defines a set of leader sequences
    // Currently this is just used for demonstration 
    // purposes.
@@ -660,8 +662,6 @@ void init_papageno(void)
            // of <leader>cat yields the same action as long as the
            // typed sequence is unambiguous.
    );
-   
-#endif
    
    PPG_QMK_COMPILE
    

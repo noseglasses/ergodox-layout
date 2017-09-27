@@ -105,7 +105,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    
   [M0] = FF_KEYMAP(
      OSL(M3)    ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,OSL(M3)    ,
-     OSL(M2)    ,KC_A       ,KC_S       ,KC_E       ,KC_T       ,LT(M1,KC_G),KC_Y       ,KC_N       ,KC_I       ,KC_O       ,KC_H       ,OSL(M2)    ,
+     OSL(M2)    ,KC_A       ,KC_S       ,KC_E       ,KC_T       ,KC_G       ,KC_Y       ,KC_N       ,KC_I       ,KC_O       ,KC_H       ,OSL(M2)    ,
      OSM(MOD_LCTL),KC_Z     ,KC_X       ,KC_C       ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,KC_DOT     ,KC_SLASH   ,OSM(MOD_LCTL),
      LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT),XXXXXXXXXXX,KC_F7    ,KC_ESC
   ),
