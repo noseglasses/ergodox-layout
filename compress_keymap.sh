@@ -91,7 +91,7 @@ avr-gcc \
    -I${BASE_DIR}/quantum/../lib/papageno/3rd_party \
    -I${BASE_DIR}/quantum/../lib/papageno/build/atmega32u4/src \
     \
-   -include keyboards/planck/keymaps/noseglasses/config.h \
+   -include keyboards/${KEYBOARD}/keymaps/noseglasses/config.h \
    \
    ${CUR_DIR}/compress_keymap.c \
    \

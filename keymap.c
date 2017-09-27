@@ -22,16 +22,8 @@
 // Note that we try to determine the type of keyboard based on
 // what is defined through the config.h header
 
-#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
-
-   // Define SUBPROJECT_ez explicitly to ensure that
-   // it is define during compression builds
-   //
-   #ifndef SUBPROJECT_ez
-   #define SUBPROJECT_ez
-   #endif
-
-   #include "ergodox.h"
+#ifdef ERGODOX_EZ_CONFIG_H
+   #include "ergodox_ez.h"
 #else
    #include "planck.h"
 #endif
@@ -264,7 +256,7 @@ void matrix_scan_user(void) {
     
 //    PPG_LOG("Matrix scan user\n");
    
-#ifdef KEYBOARDS_ERGODOX_CONFIG_H_
+#ifdef ERGODOX_EZ_CONFIG_H
     uint8_t layer = biton32(layer_state);
 
     ergodox_board_led_off();
