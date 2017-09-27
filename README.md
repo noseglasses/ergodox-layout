@@ -40,19 +40,19 @@ And all this without any keys permanently held. Neat?
 The following provides a description of the exact assignments between keys pressed and keys send.
 Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the four center keys in the plancks bottom row.
 
-| Key Send    | ErgoDox Thumb Keys Involved                                 |
+| Key Send    | Thumb Keys Involved                                         |
 |-------------|-------------------------------------------------------------|
 | space       | right outer                                                 |
 | backspace   | left outer                                                  |
 | delete      | sequence of right inner and left outer                      |
 | tab         | sequence of left inner and right outer                      |
-| shift-tab   | sequence of right outre and left inner                      |
+| shift-tab   | sequence of right outer and left inner                      |
 | double tab  | tripple tap on left inner                                   |
 | enter       | left inner and right inner in arbitray order                |
 | shift       | left inner (tab for one shot, hold for permanent)           |
 | layer toggle| right inner (tab for one shot, hold for permanent)          |
 
-Check out the `keymap.c` to see how to define all this in a clearly arranged manner. 
+Check out the file `ng_papageno_settings.c` to see how to define all this in a clearly arranged manner. 
 
 ## How to build
 
@@ -64,9 +64,9 @@ To build it, you need
 The build process works as follows for a bash shell on GNU/Linux.
 
 ```sh
-# Define for which keyboard to build (currently supported are ergodox and planck)
+# Define for which keyboard to build (currently supported are ergodox_ez and planck)
 #
-KEYBOARD=ergodox
+KEYBOARD=ergodox_ez
 
 # Change to your favorite build directory
 # ...
@@ -77,14 +77,14 @@ git clone https://github.com/noseglasses/qmk_firmware.git
 cd qmk_firmware
 git submodule update --init lib/papageno
 
-# Build Papageno for avr-gcc
+# Build Papageno for atmega32u4
 #
 cd lib/papageno
 git pull origin master
-mkdir -p build/avr-gcc
-cd build/avr-gcc
+mkdir -p build/atmega32u4
+cd build/atmega32u4
 cmake -DCMAKE_TOOLCHAIN_FILE=$PWD/../../cmake/toolchains/Toolchain-avr-gcc.cmake \
-      -DPAPAGENO_PLATFORM=avr-gcc \
+      -DPAPAGENO_PLATFORM=atmega32u4 \
       -DPAPAGENO_ADDITIONAL_INCLUDE_PATHS=$PWD/../../../../tmk_core/common \
       ../..
 make
@@ -98,4 +98,24 @@ git clone https://github.com/noseglasses/noseglasses_qmk_layout.git keyboards/${
 # Build the layout
 #
 make keyboard=${KEYBOARD} keymap=noseglasses
+```
+
+## Compressed builds
+
+Compression is a two stage process. It involves the generation of an intermediate hex-file and a simulated execution of the latter. The intermediate file is executed in an avr-emulator on the build host which generates a compressed version of the specified Papageno data structures. The simulated/emulated execution is necessary as compressed data structures are highly architecture dependent. Thus the compression process can not run e.g. on a x86 architecture. Another reason for the use of an emulator is that the compression mechanism requires more memory than the atmega32u4 (2kb) provides that is used by many programmable keyboards. To cope with this memory restriction, we use a binary compatible atmega1280 that comes with significantly more memory (8kb).
+
+During the simulation the generated data structures are exported as C-code which is included during the second compilation stage which finally generates the actual keyboard-firmware. 
+
+It is obvious that [simavr](https://github.com/buserror/simavr/), the avr emulator must be installed or build and installed on the firmware build host.
+
+The two-stage compilation process above can then be triggered using the script `compress_keymap.sh` that comes with the keymap and that must be called from the QMK root directory.
+
+```sh
+# Change to QMK's root directory
+#
+cd <whatever your qmk root directory is>
+
+# Call build automation script with full relative path
+#
+./keyboards/<your keyboard, e.g. ergodox_ez>/keymap/noseglasses/compress_keymap.sh
 ```

@@ -5,7 +5,7 @@
 #include "ng_layer_settings.h"
 #include "ng_portable_keymap.h"
 
-#if !PAPAGENO_COMPRESSION_ENABLED
+#ifdef PAPAGENO_USE_COMPRESSED_DATA_STRUCTURES
 #include "compressed_keymap.h"
 #endif
 
@@ -408,7 +408,7 @@ void init_papageno(void)
    // Only if compression of the papageno data structures 
    // is desired, the actual tree specification is considered
    //
-   #if PAPAGENO_COMPRESSION_ENABLED
+   #if defined(PAPAGENO_COMPRESSION_ENABLED) | !defined(PAPAGENO_USE_COMPRESSED_DATA_STRUCTURES)
    
    PPG_QMK_INIT
    
@@ -665,10 +665,10 @@ void init_papageno(void)
    
    PPG_QMK_COMPILE
    
-   #else // #if PAPAGENO_COMPRESSION_ENABLED
+   #else
    PPG_INITIALIZE_CONTEXT_noseglasses
    PPG_QMK_SETUP_NON_DEFAULT_MANAGERS
-   #endif // #if PAPAGENO_COMPRESSION_ENABLED
+   #endif
 }
 
 #endif

@@ -43,6 +43,10 @@ endif
 OPT_DEFS += -DUSER_PRINT
 # OPT_DEFS += -DDEBUG_ACTION
 
+ifeq (${PAPAGENO_USE_COMPRESSED_DATA_STRUCTURES},yes)
+	OPT_DEFS += -DPAPAGENO_USE_COMPRESSED_DATA_STRUCTURES
+endif
+
 KEYMAP_VERSION = $(shell \
  if [ -d "${KEYMAP_PATH}/.git" ]; then \
   cd "${KEYMAP_PATH}" && git describe --abbrev=6 --dirty --always --tags --match 'v*' 2>/dev/null; \
