@@ -1,7 +1,7 @@
 # noseglasses' layout
 
 This is my personal layout for the [ErgoDox EZ](https://ergodox-ez.com/) 
-and the [Planck](https://olkb.com/planck) keyboard.
+and the [Planck](https://olkb.com/planck) keyboard. It is portable and supposed to be easily adjusted to other keyboards. One important idea is to define a common subset of keys between the keyboards. In consequence, this means that some of the keys of the ErgoDox remain unused.
 
 *Please note:* This layout uses [Papageno](https://github.com/noseglasses/papageno) to process special key combinations. Papageno is currently not officially integrated with the [QMK firmware](https://github.com/qmk/qmk_firmware/) therefore to build it, you need a patched version of QMK you can find [here](https://github.com/noseglasses/qmk_firmware). The most simple way to try and test the layout is to follow the [build instructions](#how-to-build) below.
 
@@ -11,7 +11,7 @@ At first glance, my layout is quite ordinary. It uses two layers for normal
 characters and special characters and some more layers for other stuff. However,
 some of the other layers `(2 - ..)` are currently inactive.
 
-What's special about this keymap is the use of the thumb keys. I want to do as much
+What's special about this keymap is the use of the thumb keys. I intend to do as much
 work as possible with my thumbs and specially on the four large ErgoDox thumb keys as they are most convenient to reach. 
 
 Therefore, I assign key combinations to them that trigger 
@@ -26,21 +26,22 @@ Therefore, I assign key combinations to them that trigger
 * shift (one-shot) and
 * layer toggle to symbol layer (one-shot).
 
-A similar assignment could of course also be achieved by using tap dances. 
-But to me it seems more healthy to tap two keys with two 
-different thumbs in a row than with the same thumb. This is where [Papageno](https://github.com/noseglasses/papageno), a pattern-matching libray comes in.
+That makes 9 actions that are mapped to four keys.
+A similar assignment could of course also be achieved by using tap dances. But that would mean that at least one of the keys must be hit three times.
+As to me it seems more healthy to tap two keys with two 
+different thumbs in a row than with the same thumb I go a different way. This is where [Papageno](https://github.com/noseglasses/papageno), a pattern-matching libray comes in.
 It enables the definition of key sequences, chords and clusters. Even combinations
-of all of those are possible.
+of all of these are possible.
 It is possible to use matrix key-positions but also keycodes to define
-sequences, chords and clusters.
+sequences, chords and clusters. This means that one can define sequences of physical keys or keycodes that might be mapped to several keys through QMK's keymaps.
 
-In this way we can easily handle eight different actions, i.d. keys being send, with just four different keys. And it would be possible to add even more functionality to the same four thumb keys.
+In this way we can easily handle many different actions, i.d. keys being send, with just four different keys. And it would be possible to add even more functionality to the same four thumb keys.
 And all this without any keys permanently held. Neat?
 
-The following provides a description of the exact assignments between keys pressed and keys send.
-Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the four center keys in the plancks bottom row.
+The following is a description of the exact assignments between keys pressed and related actions.
+Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the four center keys in the planck's bottom row (48 key Planck).
 
-| Key Send    | Thumb Keys Involved                                         |
+| Action      | Thumb Keys Involved                                         |
 |-------------|-------------------------------------------------------------|
 | space       | right outer                                                 |
 | backspace   | left outer                                                  |
@@ -56,8 +57,8 @@ Check out the file `ng_papageno_settings.c` to see how to define all this in a c
 
 ## How to build
 
-To build it, you need
-1) All requirements that are needed to build classical QMK firmware
+To build the keyboard firmware, you need
+1) All requirements that are needed to build the classical QMK firmware
 2) A current version of Papageno (already integrated as a submodule in the patched version of QMK)
 3) The noseglasses' layout keymap files
 
@@ -102,15 +103,25 @@ make keyboard=${KEYBOARD} keymap=noseglasses
 
 ## Compressed builds
 
-Compression is a two stage process. It involves the generation of an intermediate hex-file and a simulated execution of the latter. The intermediate file is executed in an avr-emulator on the build host which generates a compressed version of the specified Papageno data structures. The simulated/emulated execution is necessary as compressed data structures are highly architecture dependent. Thus the compression process can not run e.g. on a x86 architecture. Another reason for the use of an emulator is that the compression mechanism requires more memory than the atmega32u4 (2kb) provides that is used by many programmable keyboards. To cope with this memory restriction, we use a binary compatible atmega1280 that comes with significantly more memory (8kb).
+Compression of Papageno key sequence patterns allows to drastically reduce the resource requirements with respect to both program memory (flash memory) and RAM.
 
-During the simulation the generated data structures are exported as C-code which is included during the second compilation stage which finally generates the actual keyboard-firmware. 
+Compression is a two stage process. It involves the generation of an intermediate hex-file and a simulated execution of the latter. The intermediate file just contains the Papageno definitions and is thus not a valid firmware. It is designed to be executed by an avr-emulator on the build host to generate a compressed and compile time static version of the otherwise dynamically allocated Papageno data structures. 
 
-It is obvious that [simavr](https://github.com/buserror/simavr/), the avr emulator must be installed or build and installed on the firmware build host.
+The simulated/emulated execution is necessary as compressed data structures are highly architecture dependent. The compression executable must be executed on a platform that is binary compatible to the target platform, the keyboard. One reason for the use of an emulator instead of the keyboard CPU is that the compression mechanism requires more memory than the atmega32u4 (2kb) that is used for many keyboards provides. To cope with this memory restriction, we use a binary compatible atmega1280 that comes with significantly more memory (8kb). Another reason for the use of the emulator is the necessity to output data, the compressed data structures as C-code to a file, which is way more complicated when done with the keyboard. Also, no flashing of the compression executable is required.
+
+The exported data structures as C-code are included during the second compilation stage to finally generate the actual keyboard-firmware. 
+
+As an avr-emulator/simulator we use [simavr](https://github.com/buserror/simavr/), which, therefore, must be installed on the firmware build host.
+
+### How to compress
 
 The two-stage compilation process above can then be triggered using the script `compress_keymap.sh` that comes with the keymap and that must be called from the QMK root directory.
 
 ```sh
+# Install simavr and make sure that it can be found via the PATH variable
+#
+# ...
+
 # Change to QMK's root directory
 #
 cd <whatever your qmk root directory is>
