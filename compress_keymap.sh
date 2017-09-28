@@ -72,7 +72,8 @@ avr-gcc \
    -DF_CPU=16000000UL \
    -DQMK_KEYBOARD=\"${KEYBOARD}\" \
    -DQMK_KEYMAP=\"${KEYMAP}\" \
-    \
+   -DQMK_SUBPROJECT_CONFIG_H=\"${BASE_DIR}/keyboards/${KEYBOARD}/rev4/config.h\" `# This does only affect builds for planck` \
+   -DQMK_KEYBOARD_CONFIG_H=\"${BASE_DIR}/keyboards/${KEYBOARD}/config.h\" \
    -I${BASE_DIR}/keyboards/${KEYBOARD}/keymaps/${KEYMAP} \
    -I${BASE_DIR}/keyboards/${KEYBOARD} \
    -I${BASE_DIR}/. \
