@@ -568,7 +568,7 @@ void init_papageno(void)
    // that is available on Linux and Windows
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0), // We do not want this to be available on higher layers
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_A), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -581,7 +581,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_O), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -594,7 +594,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_U), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -607,7 +607,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_S), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -643,6 +643,7 @@ void init_papageno(void)
       //
       PPG_Chord_Flags_Disallow_Input_Deactivation
    );
+   
    ppg_alphabetic_leader_sequences(
       M0, // layer
       leader_token,  // The leader input, use NULL if no leader key is 
@@ -662,6 +663,8 @@ void init_papageno(void)
            // of <leader>cat yields the same action as long as the
            // typed sequence is unambiguous.
    );
+#if 0
+#endif
    
    PPG_QMK_COMPILE
    
