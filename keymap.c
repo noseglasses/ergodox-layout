@@ -14,9 +14,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define PERMISSIVE_HOLD
-#define PREVENT_STUCK_MODIFIERS
-
 #include "config.h"
 
 // Note that we try to determine the type of keyboard based on

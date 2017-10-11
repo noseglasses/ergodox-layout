@@ -27,4 +27,14 @@
 
 // #define NO_ACTION_TAPPING
 
+// There are problems with oneshot modifiers
+// that result from the fact that TAPPING_TERM is 
+// set to 200 by default which is too short for
+// being used with Papageno processing
+//
+#define TAPPING_TERM 5000
+
+#define PERMISSIVE_HOLD
+#define PREVENT_STUCK_MODIFIERS
+
 #endif
