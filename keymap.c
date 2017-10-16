@@ -88,7 +88,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|------+------+------+------+------+------|
  * | Ctrl |   z  |   x  |   c  |   v  |   b  |   p  |   m  |   ,  |   .  |  /?  | Ctrl |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |Cut/S3|Cpy/S4|Pst/S5|  Alt |Backsp|Shift |  M1  |Space | Alt  |  S1  |F7/S2 | ESC  |
+ * |Cut/S3|Cpy/S4|Pst/S5|  Alt |Backsp|Shift |  M1  |Space | Alt  |  S1  |Ctrl-S/S2 | ESC  |
  * `-----------------------------------------------------------------------------------'
  */
    
@@ -96,7 +96,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
      OSL(M3)    ,KC_Q       ,KC_W       ,KC_D       ,KC_F       ,KC_K       ,KC_J       ,KC_U       ,KC_R       ,KC_L       ,KC_SCOLON  ,OSL(M3)    ,
      OSL(M2)    ,KC_A       ,KC_S       ,KC_E       ,KC_T       ,KC_G       ,KC_Y       ,KC_N       ,KC_I       ,KC_O       ,KC_H       ,OSL(M2)    ,
      OSM(MOD_LCTL),KC_Z     ,KC_X       ,KC_C       ,KC_V       ,KC_B       ,KC_P       ,KC_M       ,KC_COMMA   ,KC_DOT     ,KC_SLASH   ,OSM(MOD_LCTL),
-     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT),XXXXXXXXXXX,KC_F7    ,KC_ESC
+     LCTL(KC_X) ,LCTL(KC_C) ,LCTL(KC_V) ,OSM(MOD_LALT),KC_BSPACE,OSM(MOD_LSFT),OSL(M1)  ,KC_SPACE   ,OSM(MOD_LALT),XXXXXXXXXXX,LCTL(KC_S),KC_ESC
   ),
 
 /* M1: Symbol

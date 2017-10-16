@@ -32,6 +32,9 @@
 // set to 200 by default which is too short for
 // being used with Papageno processing
 //
+#ifdef TAPPING_TERM
+#undef TAPPING_TERM
+#endif
 #define TAPPING_TERM 5000
 
 #define PERMISSIVE_HOLD
