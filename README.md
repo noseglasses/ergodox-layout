@@ -47,7 +47,7 @@ Here left/right, inner/outer refers to ErgoDox's four large thumb keys or the fo
 | backspace   | left outer                                                  |
 | delete      | sequence of right inner and left outer                      |
 | tab         | sequence of left inner and right outer                      |
-| shift-tab   | sequence of right outer and left inner                      |
+| shift-tab   | double tap on right inner                                   |
 | double tab  | tripple tap on left inner                                   |
 | enter       | left inner and right inner in arbitray order                |
 | shift       | left inner (tab for one shot, hold for permanent)           |
