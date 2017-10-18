@@ -326,8 +326,8 @@ void ng_ordinary_search_command_callback(bool activation, void *user_data)
 {
    if(!activation) { return; }
    
-   register_code16 (KC_F1);
-   unregister_code16 (KC_F1);
+   register_code16 (LCTL(KC_F));
+   unregister_code16 (LCTL(KC_F));
    register_code (KC_ENTER);
    unregister_code (KC_ENTER);
 }
@@ -463,15 +463,37 @@ void init_papageno(void)
       RIGHT_OUTER_THUMB_KEY  // right outer large thumb key
    );
          
-   /* Allow left inner and right outer thumb key to trigger key untab when
-    * hit consecutively.
-    */
-   PPG_QMK_KEYPOS_NOTE_LINE_ACTION_KEYCODE(
-      M0, // Layer
-      LSFT(KC_TAB), // Keycode action  
-      // Matrix keypos...
-      RIGHT_OUTER_THUMB_KEY,  // right outer large thumb key
-      LEFT_INNER_THUMB_KEY // left inner large thumb key
+//    /* Allow left inner and right outer thumb key to trigger key untab when
+//     * hit consecutively.
+//     */
+//    PPG_QMK_KEYPOS_CHORD_ACTION_KEYCODE(
+//       M0, // Layer
+//       LSFT(KC_TAB), // Keycode action  
+//       // Matrix keypos...
+//       RIGHT_OUTER_THUMB_KEY,  // right outer large thumb key
+//       LEFT_INNER_THUMB_KEY // left inner large thumb key
+//    );
+      
+   // Double tap right inner thumb key to trigger untab
+   //
+   // Note: This used to be triggered via a note line 
+   //       of left inner and right outer thumb key,
+   //       that turned out to interfere with
+   //       the popular combination of space followed
+   //       by shift (capital letter) at the begin
+   //       of a new sentence.
+   //
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(RIGHT_INNER_THUMB_KEY),
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            2, 
+            PPG_QMK_ACTION_KEYCODE(
+               LSFT(KC_TAB)
+            )
+         )
+      )
    );
    
    /* Allow right inner and left outer thumb key to trigger Del key when
@@ -532,7 +554,7 @@ void init_papageno(void)
       )
    );
    
-   // Double tap on S4 triggers F2 (customized replace)
+   // Double tap on S4 triggers Ctrl-r (replace in many editors)
    //
    ppg_tap_dance(
       M0,
@@ -541,7 +563,7 @@ void init_papageno(void)
          PPG_TAP(
             2, 
             PPG_QMK_ACTION_KEYCODE(
-               KC_F2
+               LCTL(KC_R)
             )
          )
       )
@@ -568,7 +590,7 @@ void init_papageno(void)
    // that is available on Linux and Windows
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0), // We do not want this to be available on higher layers
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_A), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -581,7 +603,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_O), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -594,7 +616,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_U), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -607,7 +629,7 @@ void init_papageno(void)
    );
    
    ppg_tap_dance(
-      M0,
+      PPG_LAYER_UPPER_BOUNDARY(M0),
       PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_S), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
@@ -643,6 +665,7 @@ void init_papageno(void)
       //
       PPG_Chord_Flags_Disallow_Input_Deactivation
    );
+   
    ppg_alphabetic_leader_sequences(
       M0, // layer
       leader_token,  // The leader input, use NULL if no leader key is 
@@ -662,6 +685,8 @@ void init_papageno(void)
            // of <leader>cat yields the same action as long as the
            // typed sequence is unambiguous.
    );
+#if 0
+#endif
    
    PPG_QMK_COMPILE
    

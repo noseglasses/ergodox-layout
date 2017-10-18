@@ -22,7 +22,14 @@ KEYMAP=$(basename ${CUR_DIR})
 
 COMPRESS_EXE="papageno_compress_${KEYBOARD}_${KEYMAP}"
 
-SIMAVR_COMMAND='run_avr'
+SIMAVR_COMMAND=`which run_avr`
+if [ -z "${SIMAVR_COMMAND}" ];then
+	SIMAVR_COMMAND=`which simavr`
+	if [ -z "${SIMAVR_COMMAND}" ];then
+		echo "Unable to find the simavr command. Please install simavr and make sure that the simavr executable can be found"
+		exit 1
+	fi
+fi
   
 echo "Compiling compression firmware"
 #   -mmcu=atmega128 \
