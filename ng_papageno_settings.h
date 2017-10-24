@@ -349,6 +349,24 @@ void ng_file_search_command_callback(bool activation, void *user_data)
    unregister_code (KC_ENTER);
 }
 
+void ng_umlaut_callback(bool activation, void *user_data)
+{
+   uint16_t keycode = (uint16_t)user_data;
+
+   // Allow for upper case umlauts
+   
+   if(   (keyboard_report->mods & MOD_BIT(KC_LSFT))
+      || (keyboard_report->mods & MOD_BIT(KC_RSFT)))
+   {
+      ppg_qmk_process_keycode(activation, (void*)LSFT(keycode));
+   }
+   else {
+      ppg_qmk_process_keycode(activation, user_data);
+   }
+   
+   send_keyboard_report();
+}
+
 // We need a callback to trigger the keyboard reset (to flash firmware)
 // as the RESET keycode is processed by the qmk system and is
 // for specific reason not available as Papageno keycode action.
@@ -386,6 +404,7 @@ void action_exec_user(keyevent_t event)
    S(ng_repeat_last_command_callback) \
    S(ng_ordinary_search_command_callback) \
    S(ng_file_search_command_callback) \
+   S(ng_umlaut_callback) \
    S(ng_reset_callback) \
    S(ng_get_magic_word_string) \
    S(ng_get_magic_word_string_action) \
@@ -595,8 +614,9 @@ void init_papageno(void)
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             3, 
-            PPG_QMK_ACTION_KEYCODE(
-               RALT(KC_A)
+            PPG_ACTION_USER_CALLBACK(
+               ng_umlaut_callback,
+               (void*)RALT(KC_A)
             )
          )
       )
@@ -608,8 +628,9 @@ void init_papageno(void)
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             3, 
-            PPG_QMK_ACTION_KEYCODE(
-               RALT(KC_O)
+            PPG_ACTION_USER_CALLBACK(
+               ng_umlaut_callback,
+               (void*)RALT(KC_O)
             )
          )
       )
@@ -621,8 +642,9 @@ void init_papageno(void)
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             3, 
-            PPG_QMK_ACTION_KEYCODE(
-               RALT(KC_U)
+            PPG_ACTION_USER_CALLBACK(
+               ng_umlaut_callback,
+               (void*)RALT(KC_U)
             )
          )
       )
