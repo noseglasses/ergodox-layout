@@ -349,22 +349,29 @@ void ng_file_search_command_callback(bool activation, void *user_data)
    unregister_code (KC_ENTER);
 }
 
+inline
+static bool ng_is_shift_enabled(void)
+{
+   return   (get_oneshot_mods() & MOD_BIT(KC_LSFT))
+         || (keyboard_report->mods & MOD_BIT(KC_LSFT));
+}
+
 void ng_umlaut_callback(bool activation, void *user_data)
 {
    uint16_t keycode = (uint16_t)user_data;
 
-   // Allow for upper case umlauts
+   // TODO: Find out why one shot mods do timeout
+   //       so fast
    
-   if(   (keyboard_report->mods & MOD_BIT(KC_LSFT))
-      || (keyboard_report->mods & MOD_BIT(KC_RSFT)))
-   {
-      ppg_qmk_process_keycode(activation, (void*)LSFT(keycode));
+   if(activation) {
+      
+      register_code16(KC_RALT);
+      register_code(keycode);
    }
    else {
-      ppg_qmk_process_keycode(activation, user_data);
+      unregister_code(keycode);
+      unregister_code16(KC_RALT);
    }
-   
-   send_keyboard_report();
 }
 
 // We need a callback to trigger the keyboard reset (to flash firmware)
@@ -616,7 +623,7 @@ void init_papageno(void)
             3, 
             PPG_ACTION_USER_CALLBACK(
                ng_umlaut_callback,
-               (void*)RALT(KC_A)
+               (void*)KC_A
             )
          )
       )
@@ -630,7 +637,7 @@ void init_papageno(void)
             3, 
             PPG_ACTION_USER_CALLBACK(
                ng_umlaut_callback,
-               (void*)RALT(KC_O)
+               (void*)KC_O
             )
          )
       )
@@ -644,7 +651,7 @@ void init_papageno(void)
             3, 
             PPG_ACTION_USER_CALLBACK(
                ng_umlaut_callback,
-               (void*)RALT(KC_U)
+               (void*)KC_U
             )
          )
       )
