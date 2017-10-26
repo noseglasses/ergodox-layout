@@ -610,14 +610,23 @@ void init_papageno(void)
       )
    );
    
-   // Tap dances for german umlauts (ä, ö, ü, ß)
+   
+   // Assign german umlauts as tripple taps to
+   // suitable and non-colliding (digraphs!) keys of the home row
+   //
+   // Occurence probabilities of umlauts in written german:
+   //
+   // a-umlaut  0,54%
+   // o-umlaut  0,30%
+   // u-umlaut  0,65%
+   // s-umlaut  0,37%
    //
    // These are used together with the EURKEY keyboard layout
    // that is available on Linux and Windows
    
    ppg_tap_dance(
       PPG_LAYER_UPPER_BOUNDARY(M0), // We do not want this to be available on higher layers
-      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_A), 
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_E), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             3, 
@@ -645,7 +654,7 @@ void init_papageno(void)
    
    ppg_tap_dance(
       PPG_LAYER_UPPER_BOUNDARY(M0),
-      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_U), 
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(ALPH_KEY_I), 
       PPG_TAP_DEFINITIONS(
          PPG_TAP(
             3, 
