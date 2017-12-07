@@ -108,6 +108,7 @@
    
 // Keymap for Planck
 //
+// #define FF_KEYMAP LAYOUT_planck_grid
 #define FF_KEYMAP PLANCK_GRID
 
 // Define a bunch of key aliases for transparent 

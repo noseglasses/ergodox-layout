@@ -27,6 +27,7 @@
 #define SPECIAL_KEY_3(S)            NG_KEYPOS(NG_KEY_31, S)
 #define SPECIAL_KEY_4(S)            NG_KEYPOS(NG_KEY_32, S)
 #define SPECIAL_KEY_5(S)            NG_KEYPOS(NG_KEY_33, S)
+#define SPECIAL_KEY_6(S)            NG_KEYPOS(NG_KEY_34, S)
 
 // Define alphabetic keys for norman layout. 
 //
@@ -107,6 +108,7 @@ __NL__      OP(SPECIAL_KEY_2) \
 __NL__      OP(SPECIAL_KEY_3) \
 __NL__      OP(SPECIAL_KEY_4) \
 __NL__      OP(SPECIAL_KEY_5) \
+__NL__      OP(SPECIAL_KEY_6) \
 \
 __NL__      PPG_QMK_MATRIX_POSITION_INPUTS_ALPHABETIC(OP)
 
@@ -431,6 +433,7 @@ PPG_QMK_COMPRESSION_PREPARE_SYMBOLS(NG_PPG_SYMBOLS)
 
 void init_papageno(void)
 {
+      
    // Only if compression of the papageno data structures 
    // is desired, the actual tree specification is considered
    //
@@ -610,6 +613,20 @@ void init_papageno(void)
       )
    );
    
+   // Double tap on S6 triggers Ctrl-Shift-C (switch cpp/hpp in kdevelop)
+   //
+   ppg_tap_dance(
+      M0,
+      PPG_QMK_INPUT_FROM_KEYPOS_ALIAS(SPECIAL_KEY_6), 
+      PPG_TAP_DEFINITIONS(
+         PPG_TAP(
+            2, 
+            PPG_QMK_ACTION_KEYCODE(
+               LSFT(LCTL(KC_C))
+            )
+         )
+      )
+   );
    
    // Assign german umlauts as tripple taps to
    // suitable and non-colliding (digraphs!) keys of the home row
@@ -723,8 +740,6 @@ void init_papageno(void)
            // of <leader>cat yields the same action as long as the
            // typed sequence is unambiguous.
    );
-#if 0
-#endif
    
    PPG_QMK_COMPILE
    
